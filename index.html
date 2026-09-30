@@ -170,6 +170,11 @@
     .readonly-notice-text { font-size: 14px; color: #92400E; }
     .readonly-notice-text strong { font-weight: 600; }
     
+    /* Sync indicator */
+    .sync-indicator { position: fixed; top: 80px; right: 20px; background: white; padding: 8px 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 12px; display: none; z-index: 200; }
+    .sync-indicator.syncing { display: flex; align-items: center; gap: 8px; color: var(--primary); }
+    .sync-indicator.error { display: flex; background: #fef2f2; color: #dc2626; }
+    
     /* Footer */
     .footer { background: var(--secondary); color: white; padding: 24px; text-align: center; margin-top: 48px; }
     .footer-text { font-size: 13px; opacity: 0.7; }
@@ -238,6 +243,10 @@
         </div>
       </div>
     </header>
+    
+    <div class="sync-indicator" id="syncIndicator">
+      <span>⏳</span> Syncing...
+    </div>
     
     <div id="myProgressionView">
       <section class="profile-section">
@@ -315,6 +324,55 @@
 
 <script src="employees.js"></script>
 <script>
+// ========== GOOGLE SHEETS API ==========
+const SHEETS_API = 'https://script.google.com/macros/s/AKfycbwu75LCpoUelojlqfo-6X41V6qdvJGG7TVpdyo7xtRzEbu9_srbaj93cdssPdRuqBm2Mw/exec';
+
+async function loadProgressFromSheets(email) {
+  try {
+    const response = await fetch(`${SHEETS_API}?action=get&email=${encodeURIComponent(email)}`);
+    const data = await response.json();
+    if (data.success && data.progress) {
+      return JSON.parse(data.progress || '{}');
+    }
+  } catch (e) {
+    console.error('Failed to load from sheets:', e);
+  }
+  return {};
+}
+
+async function saveProgressToSheets(email, progress, updatedBy) {
+  showSyncIndicator(true);
+  try {
+    const params = new URLSearchParams({
+      action: 'save',
+      email: email,
+      progress: JSON.stringify(progress),
+      updatedBy: updatedBy
+    });
+    const response = await fetch(`${SHEETS_API}?${params.toString()}`);
+    const data = await response.json();
+    showSyncIndicator(false);
+    return data.success;
+  } catch (e) {
+    console.error('Failed to save to sheets:', e);
+    showSyncIndicator(false, true);
+    return false;
+  }
+}
+
+function showSyncIndicator(show, error = false) {
+  const indicator = document.getElementById('syncIndicator');
+  indicator.className = 'sync-indicator';
+  if (show) {
+    indicator.classList.add('syncing');
+    indicator.innerHTML = '<span>⏳</span> Syncing...';
+  } else if (error) {
+    indicator.classList.add('error');
+    indicator.innerHTML = '<span>⚠️</span> Sync failed';
+    setTimeout(() => indicator.className = 'sync-indicator', 3000);
+  }
+}
+
 // ========== CONFIGURATION ==========
 const levels = [
   { id: 1, name: 'Contributors', short: 'Contributor', bonus: 5, hasSubs: true },
@@ -342,7 +400,6 @@ const competencies = [
   { id: 'leadership', name: 'Leadership', icon: '⭐', iconClass: 'leadership', desc: 'Reliability, professionalism, and values alignment' }
 ];
 
-// Behaviours per level per competency
 const behaviours = {
   personal: {
     1: ['Complete assigned tasks accurately and on time', 'Respond positively to feedback and visibly improve next cycle', 'Ask for help early when stuck', 'Use AI assistants with guidance to draft emails, summarise content, or look up how-tos', 'Always review AI output for accuracy before using it'],
@@ -390,22 +447,19 @@ const behaviours = {
 let currentUser = null;
 let currentView = 'my';
 let selectedTeamMember = null;
-let allProgress = {}; // Stores progress for all users (manager can edit their reports)
+let allProgress = {};
 
 // ========== FUNCTIONS ==========
-function handleLogin() {
+async function handleLogin() {
   const email = document.getElementById('emailInput').value.toLowerCase().trim();
   const password = document.getElementById('passwordInput').value;
+
   const user = employees[email];
-  
   if (user && password === 'demo123') {
     currentUser = { email, ...user };
     
-    // Load all progress data
-    const savedProgress = localStorage.getItem('soh_all_progress');
-    if (savedProgress) {
-      allProgress = JSON.parse(savedProgress);
-    }
+    // Load progress from Google Sheets
+    allProgress[email] = await loadProgressFromSheets(email);
     
     showApp();
   } else {
@@ -417,6 +471,7 @@ function handleLogout() {
   currentUser = null;
   selectedTeamMember = null;
   currentView = 'my';
+  allProgress = {};
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('app').classList.remove('active');
   document.getElementById('emailInput').value = '';
@@ -428,7 +483,6 @@ function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('app').classList.add('active');
   
-  // Enable/disable team view based on whether user has direct reports
   const hasReports = currentUser.directReports && currentUser.directReports.length > 0;
   document.getElementById('teamViewBtn').disabled = !hasReports;
   
@@ -465,9 +519,9 @@ function getProgress(email) {
   return allProgress[email] || {};
 }
 
-function setProgress(email, data) {
+async function setProgress(email, data) {
   allProgress[email] = data;
-  localStorage.setItem('soh_all_progress', JSON.stringify(allProgress));
+  await saveProgressToSheets(email, data, currentUser.email);
 }
 
 function calculateProgress(email, levelId, sublevelId) {
@@ -526,10 +580,7 @@ function renderMyProgression() {
   const progress = calculateProgress(user.email, user.level, user.sublevel);
   document.getElementById('profileProgress').textContent = `✅ ${progress}% Complete`;
   
-  // Show readonly notice (employees can't edit their own progression)
   document.getElementById('readonlyNotice').style.display = 'flex';
-  
-  // Hide sublevel track if no sublevels
   document.getElementById('sublevelTrack').style.display = levelInfo.hasSubs ? 'block' : 'none';
   
   renderLevelNodes(user.level);
@@ -556,7 +607,6 @@ function renderLevelNodes(currentLevel) {
     
     const node = document.createElement('div');
     node.className = 'level-node';
-    
     let dotClass = 'level-dot';
     if (lvl.id < currentLevel) dotClass += ' completed';
     else if (lvl.id === currentLevel) dotClass += ' current';
@@ -574,7 +624,6 @@ function renderLevelNodes(currentLevel) {
 
 function renderSublevelNodes(currentSublevel, levelName) {
   document.getElementById('currentLevelName').textContent = levelName;
-  
   const container = document.getElementById('sublevelNodes');
   container.innerHTML = '';
   
@@ -587,7 +636,6 @@ function renderSublevelNodes(currentSublevel, levelName) {
     
     const node = document.createElement('div');
     node.className = 'sublevel-node';
-    
     let dotClass = 'sublevel-dot';
     if (sl.id < currentSublevel) dotClass += ' completed';
     else if (sl.id === currentSublevel) dotClass += ' current';
@@ -604,11 +652,18 @@ function renderSublevelNodes(currentSublevel, levelName) {
 }
 
 // ========== TEAM VIEW ==========
-function renderTeamView() {
+async function renderTeamView() {
   const container = document.getElementById('teamGrid');
   container.innerHTML = '';
   
   document.getElementById('teamTitle').textContent = `Direct Reports (${currentUser.directReports.length})`;
+  
+  // Load progress for all direct reports
+  for (const reportEmail of currentUser.directReports) {
+    if (!allProgress[reportEmail]) {
+      allProgress[reportEmail] = await loadProgressFromSheets(reportEmail);
+    }
+  }
   
   currentUser.directReports.forEach(reportEmail => {
     const report = employees[reportEmail];
@@ -636,11 +691,9 @@ function renderTeamView() {
         <span class="team-card-badge">${progress}% complete</span>
       </div>
     `;
-    
     container.appendChild(card);
   });
   
-  // Show selected member if any
   if (selectedTeamMember) {
     renderSelectedMember();
   } else {
@@ -696,7 +749,6 @@ function renderSkills(containerId, email, levelId, sublevelId, canEdit) {
         ${renderSkillLevels(email, comp, levelId, sublevelId, canEdit, containerId)}
       </div>
     `;
-    
     container.appendChild(row);
   });
 }
@@ -706,7 +758,6 @@ function renderSkillLevels(email, comp, levelId, sublevelId, canEdit, containerI
   const behavs = behaviours[comp.id][levelId] || [];
   const userProgress = getProgress(email);
   
-  // If no sublevels, show single column
   if (!levelInfo.hasSubs || !sublevelId) {
     return `
       <div class="levels-grid" style="grid-template-columns: 1fr;">
@@ -761,9 +812,7 @@ function renderSkillLevels(email, comp, levelId, sublevelId, canEdit, containerI
     
     behavs.forEach((behav, idx) => {
       const key = `${comp.id}-${levelId}-${sl.id}-${idx}`;
-      
       let checkboxClass = 'behaviour-checkbox';
-      let isDisabled = false;
       let isChecked = false;
       let textClass = 'behaviour-text';
       let clickHandler = '';
@@ -771,7 +820,6 @@ function renderSkillLevels(email, comp, levelId, sublevelId, canEdit, containerI
       if (sl.id < sublevelId) {
         checkboxClass += ' auto-checked';
         isChecked = true;
-        isDisabled = true;
       } else if (sl.id === sublevelId) {
         isChecked = userProgress[key] === true;
         if (isChecked) checkboxClass += ' checked';
@@ -782,7 +830,6 @@ function renderSkillLevels(email, comp, levelId, sublevelId, canEdit, containerI
         }
       } else {
         checkboxClass += ' disabled';
-        isDisabled = true;
         textClass += ' disabled';
       }
       
@@ -810,18 +857,16 @@ function toggleSkill(skillId) {
   if (row) row.classList.toggle('expanded');
 }
 
-function toggleBehaviour(email, key, containerId) {
+async function toggleBehaviour(email, key, containerId) {
   const progress = getProgress(email);
   progress[key] = !progress[key];
-  setProgress(email, progress);
+  await setProgress(email, progress);
   
-  // Update UI
   if (containerId === 'teamSkillsContainer') {
     renderSelectedMember();
     renderTeamView();
   }
-  
-  showToast('Progress updated!');
+  showToast('Progress saved to Google Sheets!');
 }
 
 function showToast(message) {
@@ -861,7 +906,6 @@ function exportAssessment() {
       const checked = progress[key] ? '✓' : '○';
       content += `  ${checked} ${behav}\n`;
     });
-    
     content += '\n';
   });
   
