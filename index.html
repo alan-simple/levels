@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Online Healthcare - HR Business Partner Progression</title>
+  <title>Simple Online Healthcare - Career Progression</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -34,6 +34,7 @@
     .login-btn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; }
     .login-btn:hover { background: var(--primary-dark); }
     .error-msg { background: #fef2f2; color: #dc2626; padding: 12px 16px; border-radius: 10px; margin-bottom: 20px; font-size: 14px; display: none; }
+    .hidden { display: none !important; }
     .app { display: none; min-height: 100vh; }
     .app.active { display: block; }
     .header { background: white; border-bottom: 1px solid var(--border); padding: 0 32px; position: sticky; top: 0; z-index: 100; }
@@ -41,6 +42,9 @@
     .logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; color: var(--secondary); }
     .logo-icon { width: 36px; height: 36px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; }
     .header-right { display: flex; align-items: center; gap: 16px; }
+    .view-toggle { display: flex; background: var(--bg); border-radius: 10px; padding: 4px; }
+    .view-btn { padding: 8px 16px; border: none; background: none; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-light); cursor: pointer; }
+    .view-btn.active { background: white; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
     .export-btn { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
     .user-pill { display: flex; align-items: center; gap: 10px; background: var(--bg); padding: 6px 14px 6px 6px; border-radius: 100px; }
     .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 12px; }
@@ -55,30 +59,45 @@
     .profile-meta { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; }
     .profile-badge { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 100px; font-size: 14px; }
     .profile-badge.current { background: var(--primary); }
-    .level-track { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; }
-    .level-track-title { font-size: 14px; font-weight: 600; opacity: 0.9; margin-bottom: 20px; }
-    .level-nodes { display: flex; gap: 8px; align-items: center; }
-    .level-node { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-    .level-dot { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
-    .level-dot.completed { background: var(--primary); }
-    .level-dot.current { background: white; color: var(--secondary); box-shadow: 0 0 0 4px rgba(255,255,255,0.3); }
-    .level-label { font-size: 10px; opacity: 0.7; text-align: center; max-width: 80px; }
-    .level-label.current { opacity: 1; font-weight: 600; }
-    .level-connector { flex: 0.3; height: 3px; background: rgba(255,255,255,0.2); margin-bottom: 24px; }
-    .level-connector.completed { background: var(--primary); }
+    .sublevel-section { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; }
+    .sublevel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .sublevel-title { font-size: 14px; font-weight: 600; opacity: 0.9; }
+    .sublevel-current { font-size: 20px; font-weight: 800; }
+    .sublevel-track { display: flex; gap: 8px; align-items: center; }
+    .sublevel-node { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .sublevel-dot { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
+    .sublevel-dot.completed { background: var(--primary); }
+    .sublevel-dot.current { background: white; color: var(--secondary); box-shadow: 0 0 0 4px rgba(255,255,255,0.3); }
+    .sublevel-label { font-size: 11px; opacity: 0.7; text-align: center; }
+    .sublevel-label.current { opacity: 1; font-weight: 600; }
+    .sublevel-connector { flex: 0.5; height: 3px; background: rgba(255,255,255,0.2); margin-bottom: 24px; }
+    .sublevel-connector.completed { background: var(--primary); }
+    .sublevel-desc { margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.1); }
+    .sublevel-desc-title { font-size: 12px; opacity: 0.7; margin-bottom: 4px; }
+    .sublevel-desc-text { font-size: 14px; line-height: 1.5; }
     .main { max-width: 1400px; margin: 0 auto; padding: 32px; }
+    .level-pills { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .level-pill { padding: 10px 20px; background: white; border: 2px solid var(--border); border-radius: 100px; font-size: 13px; font-weight: 600; color: var(--text-light); display: flex; align-items: center; gap: 8px; }
+    .level-pill.current { border-color: var(--primary); background: var(--success-light); color: var(--primary); }
+    .level-pill.completed { border-color: var(--success); background: var(--success-light); color: var(--success); }
+    .level-pill .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    .sublevel-pills { display: flex; gap: 8px; margin-bottom: 32px; padding: 16px; background: white; border-radius: 12px; flex-wrap: wrap; align-items: center; }
+    .sublevel-pill { padding: 8px 16px; background: var(--bg); border: 2px solid transparent; border-radius: 8px; font-size: 13px; font-weight: 600; color: var(--text-light); }
+    .sublevel-pill.current { border-color: var(--primary); background: var(--success-light); color: var(--primary); }
+    .sublevel-pill.completed { background: var(--success-light); color: var(--success); }
+    .sublevel-pill-label { margin-right: 16px; font-size: 13px; color: var(--text-light); }
     .skills-container { display: flex; flex-direction: column; gap: 24px; }
     .skill-row { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .skill-header { padding: 20px 24px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid var(--border); cursor: pointer; }
     .skill-header:hover { background: var(--bg); }
     .skill-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-    .skill-icon.strategy { background: #DBEAFE; }
-    .skill-icon.orgdesign { background: #FEE2E2; }
-    .skill-icon.talent { background: #D1FAE5; }
-    .skill-icon.employee { background: #FCE7F3; }
-    .skill-icon.policy { background: #FEF3C7; }
-    .skill-icon.data { background: #E0E7FF; }
-    .skill-icon.stakeholder { background: #F3E8FF; }
+    .skill-icon.technical { background: #DBEAFE; }
+    .skill-icon.delivery { background: #FEE2E2; }
+    .skill-icon.communication { background: #E0E7FF; }
+    .skill-icon.teamwork { background: #D1FAE5; }
+    .skill-icon.problem { background: #FEF3C7; }
+    .skill-icon.patient { background: #FCE7F3; }
+    .skill-icon.leadership { background: #F3E8FF; }
     .skill-info { flex: 1; }
     .skill-info h3 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
     .skill-info p { font-size: 13px; color: var(--text-light); }
@@ -90,30 +109,34 @@
     .skill-row.expanded .expand-icon { transform: rotate(180deg); }
     .skill-levels { display: none; padding: 0 24px 24px; }
     .skill-row.expanded .skill-levels { display: block; }
-    .levels-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .levels-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .levels-grid.full-view { grid-template-columns: repeat(4, 1fr); }
     .level-column { border: 2px solid var(--border); border-radius: 12px; overflow: hidden; }
     .level-column.completed { border-color: var(--success); background: linear-gradient(to bottom, var(--success-light), white); }
     .level-column.current { border-color: var(--primary); box-shadow: 0 4px 12px rgba(0, 168, 157, 0.15); }
     .level-column.locked { opacity: 0.5; }
-    .level-column-header { padding: 12px 14px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .level-column-header { padding: 14px 16px; background: var(--bg); border-bottom: 1px solid var(--border); }
     .level-column.completed .level-column-header { background: var(--success-light); }
     .level-column.current .level-column-header { background: var(--success-light); }
-    .level-column-title { font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
-    .level-column-title .badge { font-size: 9px; padding: 2px 6px; border-radius: 100px; background: var(--primary); color: white; }
+    .level-column-title { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .level-column-title .badge { font-size: 10px; padding: 2px 8px; border-radius: 100px; background: var(--primary); color: white; }
     .level-column-title .badge.completed { background: var(--success); }
     .level-column-title .badge.locked { background: var(--text-light); }
-    .level-column-subtitle { font-size: 10px; color: var(--text-light); margin-top: 2px; }
-    .level-column-body { padding: 14px; }
-    .behaviour-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .level-column-subtitle { font-size: 11px; color: var(--text-light); margin-top: 2px; }
+    .level-column-body { padding: 16px; }
+    .behaviour-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
     .behaviour-item:last-child { border-bottom: none; }
-    .behaviour-checkbox { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; transition: all 0.2s; font-size: 11px; }
+    .behaviour-checkbox { width: 20px; height: 20px; border: 2px solid var(--border); border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; transition: all 0.2s; }
     .behaviour-checkbox:hover:not(.disabled) { border-color: var(--primary); }
     .behaviour-checkbox.checked { background: var(--primary); border-color: var(--primary); color: white; }
     .behaviour-checkbox.auto-checked { background: var(--success); border-color: var(--success); color: white; cursor: default; }
     .behaviour-checkbox.disabled { cursor: not-allowed; opacity: 0.4; }
     .behaviour-content { flex: 1; }
-    .behaviour-text { font-size: 12px; line-height: 1.5; }
+    .behaviour-text { font-size: 13px; line-height: 1.5; }
     .behaviour-text.disabled { opacity: 0.5; }
+    .behaviour-example { font-size: 12px; color: var(--text-light); margin-top: 6px; padding: 8px 12px; background: var(--bg); border-radius: 8px; display: none; }
+    .behaviour-item.show-example .behaviour-example { display: block; }
+    .example-toggle { font-size: 11px; color: var(--primary); cursor: pointer; margin-top: 4px; font-weight: 600; }
     .footer { background: var(--secondary); color: white; padding: 24px; text-align: center; margin-top: 48px; }
     .footer-text { font-size: 13px; opacity: 0.7; }
     .promotion-toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%); background: var(--secondary); color: white; padding: 16px 32px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 1000; display: none; animation: slideUp 0.3s ease; }
@@ -121,13 +144,12 @@
     @keyframes slideUp { from { transform: translateX(-50%) translateY(20px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
     .promotion-toast h3 { font-size: 18px; margin-bottom: 4px; }
     .promotion-toast p { font-size: 14px; opacity: 0.9; }
-    @media (max-width: 1200px) { .levels-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 1200px) { .levels-grid.full-view { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 768px) { 
-      .levels-grid { grid-template-columns: 1fr; }
+      .levels-grid, .levels-grid.full-view { grid-template-columns: 1fr; }
       .profile-top { flex-direction: column; text-align: center; }
       .profile-meta { justify-content: center; }
       .main { padding: 20px; }
-      .level-nodes { flex-wrap: wrap; }
     }
   </style>
 </head>
@@ -156,6 +178,10 @@
       <div class="header-inner">
         <div class="logo"><div class="logo-icon">S</div><span>Simple Progression</span></div>
         <div class="header-right">
+          <div class="view-toggle">
+            <button class="view-btn" onclick="setView('focused')" id="focusedBtn">Focused</button>
+            <button class="view-btn active" onclick="setView('full')" id="fullBtn">Full View</button>
+          </div>
           <button class="export-btn" onclick="exportAssessment()"><span>📥</span> Export</button>
           <div class="user-pill">
             <div class="user-avatar" id="userAvatar">AC</div>
@@ -171,279 +197,1370 @@
           <div class="profile-avatar" id="profileAvatar">AC</div>
           <div class="profile-info">
             <h1 id="profileName">Alan Creevy</h1>
-            <div class="profile-title" id="profileTitle">HR Business Partner</div>
+            <div class="profile-title" id="profileTitle">Senior Developer 3B</div>
             <div class="profile-meta">
-              <div class="profile-badge" id="profileTrack">👥 HR Business Partner</div>
+              <div class="profile-badge" id="profileTrack">🛠️ Engineering</div>
+              <div class="profile-badge" id="profileBonus">💰 7% Bonus</div>
               <div class="profile-badge current" id="profileProgress">✅ 0% Complete</div>
             </div>
           </div>
         </div>
-        <div class="level-track">
-          <div class="level-track-title">Your career progression</div>
-          <div class="level-nodes" id="levelNodes"></div>
+        <div class="sublevel-section">
+          <div class="sublevel-header">
+            <div class="sublevel-title">Your progression within this level</div>
+            <div class="sublevel-current" id="sublevelCurrent">Level 3B</div>
+          </div>
+          <div class="sublevel-track" id="sublevelTrack"></div>
+          <div class="sublevel-desc">
+            <div class="sublevel-desc-title">What this means</div>
+            <div class="sublevel-desc-text" id="sublevelDesc">You're meeting expectations consistently.</div>
+          </div>
         </div>
       </div>
     </section>
     <main class="main">
+      <div class="level-pills" id="levelPills"></div>
+      <div class="sublevel-pills" id="sublevelPills"></div>
       <div class="skills-container" id="skillsContainer"></div>
     </main>
     <footer class="footer"><p class="footer-text">© Simple Online Healthcare 2026</p></footer>
   </div>
   <div class="promotion-toast" id="promotionToast">
     <h3>🎉 Congratulations!</h3>
-    <p id="promotionText">You've been promoted!</p>
+    <p id="promotionText">You've been promoted to Senior Developer 3C!</p>
   </div>
 
 <script>
 // ========== DATA ==========
 const users = {
-  'alan@simpleonlinehealthcare.com': { password: 'alan123', name: 'Alan Creevy', level: 2 },
-  'sarah@simpleonlinehealthcare.com': { password: 'sarah123', name: 'Sarah Mitchell', level: 1 },
-  'james@simpleonlinehealthcare.com': { password: 'james123', name: 'James Wilson', level: 3 },
-  'emma@simpleonlinehealthcare.com': { password: 'emma123', name: 'Emma Thompson', level: 4 }
+  'alan@simpleonlinehealthcare.com': { password: 'alan123', name: 'Alan Creevy', track: 'engineering', level: 3, sublevel: 'B' },
+  'sarah@simpleonlinehealthcare.com': { password: 'sarah123', name: 'Sarah Mitchell', track: 'engineering', level: 1, sublevel: 'C' },
+  'james@simpleonlinehealthcare.com': { password: 'james123', name: 'James Wilson', track: 'engineering', level: 4, sublevel: 'C' },
+  'emma@simpleonlinehealthcare.com': { password: 'emma123', name: 'Emma Thompson', track: 'product', level: 2, sublevel: 'A' }
 };
 
-const levels = [
-  { id: 1, title: 'Associate HRBP', short: 'Associate' },
-  { id: 2, title: 'HR Business Partner', short: 'HRBP' },
-  { id: 3, title: 'Senior HR Business Partner', short: 'Senior HRBP' },
-  { id: 4, title: 'Lead HR Business Partner', short: 'Lead HRBP' },
-  { id: 5, title: 'Principal HR Business Partner', short: 'Principal' }
-];
+const tracks = {
+  engineering: {
+    name: 'Engineering',
+    icon: '🛠️',
+    titles: ['Junior Developer', 'Developer', 'Senior Developer', 'Lead Developer', 'Engineering Manager', 'Head of Engineering']
+  },
+  product: {
+    name: 'Product',
+    icon: '📦',
+    titles: ['Associate PM', 'Product Manager', 'Senior PM', 'Lead PM', 'Head of Product', 'CPO']
+  }
+};
+
+const sublevels = ['A', 'B', 'C', 'D'];
+const sublevelDescriptions = {
+  'A': { name: 'Developing', desc: 'Building foundational skills and learning the expectations of this level.' },
+  'B': { name: 'Performing', desc: 'Consistently meeting expectations and demonstrating competence.' },
+  'C': { name: 'Exceeding', desc: 'Going above and beyond, showing mastery of current level.' },
+  'D': { name: 'Ready for Next', desc: 'Fully prepared for promotion to the next level.' }
+};
+
+const bonusRates = {
+  1: { A: 3.0, B: 3.5, C: 4.0, D: 4.5 },
+  2: { A: 5.0, B: 5.5, C: 6.0, D: 6.5 },
+  3: { A: 7.0, B: 7.5, C: 8.0, D: 8.5 },
+  4: { A: 9.0, B: 9.5, C: 10.0, D: 10.5 },
+  5: { A: 12.0, B: 12.5, C: 13.0, D: 13.5 },
+  6: { A: 15.0, B: 15.5, C: 16.0, D: 16.5 }
+};
 
 const skills = [
-  { id: 'strategy', name: 'Strategic HR Partnership', icon: '🎯', iconClass: 'strategy', desc: 'People strategy & business partnership' },
-  { id: 'orgdesign', name: 'Organization Design & Change', icon: '🔄', iconClass: 'orgdesign', desc: 'Restructuring, transformation & change management' },
-  { id: 'talent', name: 'Talent, Performance & Development', icon: '⭐', iconClass: 'talent', desc: 'Talent processes, succession & capability building' },
-  { id: 'employee', name: 'Employee Relations, Coaching & Wellbeing', icon: '💚', iconClass: 'employee', desc: 'ER cases, manager coaching & employee support' },
-  { id: 'policy', name: 'HR Policy, Risk & Compliance', icon: '📋', iconClass: 'policy', desc: 'Policy application, legal compliance & risk management' },
-  { id: 'data', name: 'People Data, Workforce Planning & HR Tech', icon: '📊', iconClass: 'data', desc: 'Analytics, workforce planning & technology' },
-  { id: 'stakeholder', name: 'Stakeholder Management & Influence', icon: '🤝', iconClass: 'stakeholder', desc: 'Building relationships & influencing decisions' }
+  { id: 'technical', name: 'Technical Excellence', icon: '💻', iconClass: 'technical', desc: 'Quality of code, architecture, and technical decisions' },
+  { id: 'delivery', name: 'Delivery & Execution', icon: '🚀', iconClass: 'delivery', desc: 'Shipping work on time with quality' },
+  { id: 'communication', name: 'Communication', icon: '💬', iconClass: 'communication', desc: 'Clear and effective communication' },
+  { id: 'teamwork', name: 'Teamwork & Collaboration', icon: '🤝', iconClass: 'teamwork', desc: 'Working effectively with others' },
+  { id: 'problem', name: 'Problem Solving', icon: '🧩', iconClass: 'problem', desc: 'Analytical thinking and creative solutions' },
+  { id: 'patient', name: 'Patient & Commercial Focus', icon: '❤️', iconClass: 'patient', desc: 'Understanding patient needs and business impact' },
+  { id: 'leadership', name: 'Leadership & Influence', icon: '⭐', iconClass: 'leadership', desc: 'Guiding and influencing others' }
 ];
 
-// Behaviours from Matricsy HR Business Partner framework
+// BEHAVIOURS WITH PROGRESSION: Each sub-level (A, B, C, D) has different expectations
+// Structure: behaviours[skillId][level][sublevel] = [array of 5 behaviours]
 const behaviours = {
-  strategy: {
-    1: [
-      'Support delivery of people plans for a business area under guidance, using agreed priorities and timelines',
-      'Connect basic people topics such as hiring, performance, absence, and development to team needs',
-      'Prepare accurate inputs for business reviews, workforce updates, and HR action tracking'
-    ],
-    2: [
-      'Independently partner with line managers on people priorities aligned to business goals',
-      'Identify recurring workforce issues and recommend practical interventions across hiring, capability, engagement, or retention',
-      'Translate annual business objectives into a clear people plan for supported functions',
-      'Balance employee experience, manager needs, and business constraints in day-to-day decisions'
-    ],
-    3: [
-      'Shape people strategy for a department or business unit using business performance, capability gaps, and organisation needs',
-      'Advise leaders on trade-offs across structure, talent, culture, cost, and risk',
-      'Influence medium-term workforce and capability priorities beyond immediate operational issues',
-      'Ensure people initiatives are sequenced realistically and tied to measurable business outcomes'
-    ],
-    4: [
-      'Define strategic people priorities across multiple functions or a major business area',
-      'Guide senior leaders through complex business changes with integrated people, organisation, and culture responses',
-      'Set standards for how HR business partnering operates, including planning cadence, stakeholder engagement, and impact tracking',
-      'Challenge leadership assumptions with evidence and sound organizational judgment'
-    ],
-    5: [
-      'Shape enterprise-level people strategy linked to business model, growth plans, and organisational capability',
-      'Influence executive decision making on long-range workforce, organisation, and leadership priorities',
-      'Define the strategic operating model for HR business partnering across the organisation',
-      'Establish success measures for people strategy and ensure sustained organizational impact'
-    ]
+  technical: {
+    1: {
+      A: [
+        'Write basic code with guidance from senior team members',
+        'Follow existing code patterns when completing assigned tasks',
+        'Use debugging tools with support to identify simple issues',
+        'Understand and use version control for basic commits',
+        'Ask clarifying questions about requirements before starting work'
+      ],
+      B: [
+        'Write clean, readable code following team standards independently',
+        'Complete assigned tasks with minimal guidance needed',
+        'Debug simple issues independently using standard techniques',
+        'Use version control confidently including branching',
+        'Clarify requirements proactively and document assumptions'
+      ],
+      C: [
+        'Write well-structured code and suggest improvements to existing code',
+        'Complete tasks efficiently and help identify edge cases',
+        'Debug moderately complex issues and explain root causes',
+        'Use version control best practices and help others with conflicts',
+        'Anticipate requirement gaps and propose solutions'
+      ],
+      D: [
+        'Write exemplary code that others reference as best practice',
+        'Complete complex tasks and support junior team members',
+        'Debug complex issues across multiple components',
+        'Champion version control best practices within the team',
+        'Drive requirement clarity sessions and document decisions'
+      ]
+    },
+    2: {
+      A: [
+        'Write tested code with some guidance on test strategy',
+        'Participate in code reviews and learn from feedback',
+        'Understand basic system architecture concepts',
+        'Identify obvious code quality issues',
+        'Document work when prompted'
+      ],
+      B: [
+        'Write well-tested, maintainable code independently',
+        'Contribute constructively to code reviews with helpful feedback',
+        'Understand system architecture and make appropriate decisions',
+        'Proactively identify and improve code quality issues',
+        'Document technical decisions clearly without prompting'
+      ],
+      C: [
+        'Write comprehensive tests and guide others on test strategy',
+        'Lead code reviews and establish review standards',
+        'Propose architectural improvements for team systems',
+        'Drive code quality initiatives across the team',
+        'Create documentation that becomes team reference material'
+      ],
+      D: [
+        'Define testing standards and mentor others on best practices',
+        'Shape code review culture and coach reviewers',
+        'Make architectural decisions with cross-team impact',
+        'Lead technical debt reduction initiatives',
+        'Establish documentation standards for the team'
+      ]
+    },
+    3: {
+      A: [
+        'Design features with guidance on complex architectural decisions',
+        'Participate in technical discussions and share perspectives',
+        'Support junior developers when they have questions',
+        'Identify technical debt in areas you work on',
+        'Follow and promote engineering best practices'
+      ],
+      B: [
+        'Design and implement complex features end-to-end independently',
+        'Lead technical discussions and drive decisions within the team',
+        'Mentor junior developers through regular pairing sessions',
+        'Proactively identify and address technical debt',
+        'Champion engineering best practices across the team'
+      ],
+      C: [
+        'Design systems that handle complex requirements elegantly',
+        'Influence technical direction across multiple teams',
+        'Develop mentoring programmes for junior developers',
+        'Lead technical debt prioritisation and resolution',
+        'Define and evolve engineering best practices'
+      ],
+      D: [
+        'Design solutions that set architectural direction for the org',
+        'Drive consensus on technical decisions across the engineering org',
+        'Build mentoring culture and develop other mentors',
+        'Shape technical debt strategy at organisational level',
+        'Represent engineering excellence externally'
+      ]
+    },
+    4: {
+      A: [
+        'Contribute to technical strategy discussions for the team',
+        'Make architectural decisions with awareness of broader impact',
+        'Evaluate new technologies for team adoption',
+        'Monitor system reliability and suggest improvements',
+        'Support building strong engineering practices'
+      ],
+      B: [
+        'Define technical strategy for team or domain',
+        'Make architectural decisions with organisation-wide impact',
+        'Drive adoption of new technologies where appropriate',
+        'Ensure system reliability and scalability',
+        'Build strong engineering culture within the team'
+      ],
+      C: [
+        'Shape technical strategy across multiple teams',
+        'Lead architectural decisions that affect the platform',
+        'Evaluate and pilot emerging technologies strategically',
+        'Define reliability standards and SLOs for systems',
+        'Influence engineering culture across the department'
+      ],
+      D: [
+        'Define technical vision for the engineering organisation',
+        'Drive architectural transformation initiatives',
+        'Build technology radar and innovation pipeline',
+        'Lead reliability and scalability across all systems',
+        'Shape engineering culture at company level'
+      ]
+    },
+    5: {
+      A: [
+        'Contribute to engineering standards discussions',
+        'Balance technical decisions with business context',
+        'Support major technical initiatives',
+        'Help develop engineering talent in your area',
+        'Participate in engineering leadership discussions'
+      ],
+      B: [
+        'Set engineering standards across teams',
+        'Balance technical excellence with business needs effectively',
+        'Drive major technical initiatives',
+        'Build and develop engineering talent',
+        'Represent engineering in leadership forums'
+      ],
+      C: [
+        'Define engineering standards at organisational level',
+        'Shape how technical and business priorities are balanced',
+        'Lead transformational technical initiatives',
+        'Build engineering leadership pipeline',
+        'Influence company strategy from engineering perspective'
+      ],
+      D: [
+        'Set industry-leading engineering standards',
+        'Drive technical strategy as competitive advantage',
+        'Lead company-defining technical programmes',
+        'Develop world-class engineering leaders',
+        'Shape company direction through technical vision'
+      ]
+    },
+    6: {
+      A: [
+        'Contribute to company-wide technical vision',
+        'Support digital transformation initiatives',
+        'Help build engineering organisation capabilities',
+        'Identify opportunities for technical competitive advantage',
+        'Participate in shaping industry conversations'
+      ],
+      B: [
+        'Define company-wide technical vision',
+        'Drive digital transformation initiatives',
+        'Build world-class engineering organisation',
+        'Ensure technical competitive advantage',
+        'Shape industry best practices'
+      ],
+      C: [
+        'Evolve technical vision as market changes',
+        'Lead multiple transformation programmes simultaneously',
+        'Attract and retain top engineering talent globally',
+        'Create sustained technical competitive advantage',
+        'Influence industry direction through thought leadership'
+      ],
+      D: [
+        'Set visionary technical direction for the industry',
+        'Transform company through technology innovation',
+        'Build engineering organisation recognised as industry-leading',
+        'Define new technical paradigms',
+        'Lead industry-wide technical initiatives'
+      ]
+    }
   },
-  orgdesign: {
-    1: [
-      'Support simple team changes by documenting role impacts, reporting lines, and communication needs',
-      'Help coordinate change actions such as manager briefings, FAQs, and employee updates under guidance',
-      'Recognize when change activity may affect morale, role clarity, or policy compliance and escalate appropriately'
-    ],
-    2: [
-      'Independently support local restructures, team redesigns, or role clarification exercises',
-      'Assess likely people impacts of change and help managers plan communication, transition, and support actions',
-      'Use basic organization design principles such as span of control, role clarity, and decision alignment in recommendations',
-      'Track change adoption issues and adjust plans with managers as needed'
-    ],
-    3: [
-      'Lead organization design work for a business unit, including current-state assessment and future-state options',
-      'Facilitate change plans that address stakeholder alignment, capability needs, role impacts, and resistance risks',
-      'Evaluate structural options against business outcomes, employee impact, and implementation complexity',
-      'Coach leaders on visible sponsorship and consistent change communication'
-    ],
-    4: [
-      'Lead complex redesign or transformation programs spanning multiple teams, geographies, or leadership layers',
-      'Define organization design principles and change governance for major initiatives',
-      'Integrate workforce planning, culture, process, and leadership implications into transformation decisions',
-      'Review change outcomes and improve organization design and transition practices across the HR function'
-    ],
-    5: [
-      'Shape enterprise organization design strategy in response to growth, restructuring, operating model shifts, or mergers',
-      'Set organization design standards, decision rights, and governance expectations across the company',
-      'Advise executive leaders on complex transformation trade-offs involving structure, culture, talent, and risk',
-      'Build organizational capability for leading large-scale change sustainably'
-    ]
+  delivery: {
+    1: {
+      A: [
+        'Complete tasks with guidance on estimation and planning',
+        'Communicate blockers when prompted by team lead',
+        'Follow team processes with reminders',
+        'Work on prioritised tasks as assigned',
+        'Contribute to sprint goals with support'
+      ],
+      B: [
+        'Complete tasks within estimated timeframes',
+        'Communicate blockers promptly without prompting',
+        'Follow team processes and workflows consistently',
+        'Prioritise work appropriately with guidance',
+        'Meet sprint commitments consistently'
+      ],
+      C: [
+        'Complete tasks efficiently and help improve estimates',
+        'Anticipate blockers and address them proactively',
+        'Suggest process improvements based on experience',
+        'Prioritise effectively with minimal guidance',
+        'Exceed sprint commitments regularly'
+      ],
+      D: [
+        'Help others improve their estimation accuracy',
+        'Remove blockers for yourself and support others',
+        'Drive process improvements within the team',
+        'Guide others on prioritisation decisions',
+        'Lead by example in consistent delivery'
+      ]
+    },
+    2: {
+      A: [
+        'Deliver features with some support on complex aspects',
+        'Break down work with guidance on larger tasks',
+        'Manage time with occasional support',
+        'Adapt to changing priorities with guidance',
+        'Ship work with acceptable quality levels'
+      ],
+      B: [
+        'Deliver features independently on schedule',
+        'Break down work into manageable chunks effectively',
+        'Manage own time effectively',
+        'Handle changing priorities gracefully',
+        'Ship with quality and minimal bugs'
+      ],
+      C: [
+        'Deliver complex features ahead of schedule',
+        'Help others break down their work effectively',
+        'Optimise time management and share techniques',
+        'Help team adapt to priority changes smoothly',
+        'Ship with exceptional quality consistently'
+      ],
+      D: [
+        'Lead delivery of features involving multiple people',
+        'Define work breakdown standards for the team',
+        'Coach others on time management',
+        'Guide team through major priority shifts',
+        'Set quality standards others aspire to'
+      ]
+    },
+    3: {
+      A: [
+        'Drive projects with support on complex coordination',
+        'Coordinate with team members on shared work',
+        'Identify risks with guidance on mitigation',
+        'Balance speed and quality with occasional trade-off support',
+        'Deliver under normal pressure consistently'
+      ],
+      B: [
+        'Drive complex projects to completion independently',
+        'Coordinate effectively across team members',
+        'Identify and mitigate risks early',
+        'Balance speed with quality appropriately',
+        'Deliver consistently under pressure'
+      ],
+      C: [
+        'Drive multiple complex projects simultaneously',
+        'Coordinate across teams on shared initiatives',
+        'Build risk identification into project planning',
+        'Help others navigate speed/quality trade-offs',
+        'Thrive under pressure and support others'
+      ],
+      D: [
+        'Lead the most complex and ambiguous projects',
+        'Establish coordination patterns across the organisation',
+        'Define risk management practices for the team',
+        'Set standards for balancing speed and quality',
+        'Model calm, effective delivery in high-pressure situations'
+      ]
+    },
+    4: {
+      A: [
+        'Support team delivery commitments',
+        'Help remove blockers for team members',
+        'Contribute to process improvement discussions',
+        'Identify dependencies with other teams',
+        'Support delivery of strategic initiatives'
+      ],
+      B: [
+        'Ensure team delivers on commitments consistently',
+        'Remove blockers for team members proactively',
+        'Drive process improvements across the team',
+        'Manage dependencies across teams effectively',
+        'Deliver strategic initiatives successfully'
+      ],
+      C: [
+        'Build team capability to deliver consistently',
+        'Create systems that prevent blockers',
+        'Lead process transformation initiatives',
+        'Optimise cross-team dependency management',
+        'Lead multiple strategic initiatives'
+      ],
+      D: [
+        'Set delivery standards for the department',
+        'Build blocker-free delivery culture',
+        'Shape delivery processes at org level',
+        'Define cross-team collaboration patterns',
+        'Drive company-critical initiatives'
+      ]
+    },
+    5: {
+      A: [
+        'Contribute to department delivery standards',
+        'Support organisational efficiency initiatives',
+        'Help balance competing priorities at team level',
+        'Support predictable delivery practices',
+        'Participate in major company initiatives'
+      ],
+      B: [
+        'Set delivery standards for department',
+        'Drive organisational efficiency improvements',
+        'Balance multiple competing priorities effectively',
+        'Ensure predictable delivery across teams',
+        'Lead major company initiatives'
+      ],
+      C: [
+        'Define delivery excellence for the organisation',
+        'Transform organisational efficiency',
+        'Navigate complex priority trade-offs at exec level',
+        'Build predictability into organisational planning',
+        'Lead company-defining initiatives'
+      ],
+      D: [
+        'Set industry-leading delivery standards',
+        'Drive operational excellence as competitive advantage',
+        'Shape company strategy through delivery capability',
+        'Build world-class delivery organisation',
+        'Lead transformational company programmes'
+      ]
+    },
+    6: {
+      A: [
+        'Contribute to company-wide delivery culture',
+        'Support operational excellence initiatives',
+        'Help ensure strategic execution',
+        'Support balance of innovation and delivery',
+        'Participate in transformation programmes'
+      ],
+      B: [
+        'Set company-wide delivery culture',
+        'Drive operational excellence',
+        'Ensure strategic execution across the company',
+        'Balance innovation with delivery effectively',
+        'Lead transformation programmes'
+      ],
+      C: [
+        'Shape delivery culture as competitive advantage',
+        'Define operational excellence standards',
+        'Ensure flawless strategic execution',
+        'Create environment where innovation and delivery thrive',
+        'Lead multiple transformation programmes'
+      ],
+      D: [
+        'Build industry-recognised delivery culture',
+        'Set new standards for operational excellence',
+        'Drive strategic execution that defines the market',
+        'Pioneer new models of innovation and delivery',
+        'Transform industry through delivery excellence'
+      ]
+    }
   },
-  talent: {
-    1: [
-      'Support core talent processes such as goal cycles, review administration, succession inputs, and learning coordination',
-      'Use agreed frameworks to help managers document development actions and follow-up plans',
-      'Identify when employees may need additional support, feedback, or development pathways and flag appropriately'
-    ],
-    2: [
-      'Independently support managers on performance conversations, development planning, and internal mobility decisions',
-      'Use performance and potential data to identify talent risks and practical interventions',
-      'Contribute to succession and capability discussions with clear evidence and balanced judgment',
-      'Promote fair and consistent application of performance and development processes'
-    ],
-    3: [
-      'Design or tailor talent and development approaches for a business unit based on capability needs and workforce trends',
-      'Advise leaders on succession depth, critical roles, retention of key talent, and capability building priorities',
-      'Improve quality of calibration and talent reviews through sound challenge and facilitation',
-      'Measure the impact of development and talent actions on readiness, performance, or retention'
-    ],
-    4: [
-      'Lead cross-functional talent and development strategies for leadership pipelines, critical skills, and workforce capability',
-      'Set expectations for robust talent review, succession planning, and development governance',
-      'Align performance and development practices to business transformation, culture, and future capability needs',
-      'Sponsor improvements to enterprise talent processes where current approaches limit business impact'
-    ],
-    5: [
-      'Define enterprise talent philosophy and strategic workforce capability priorities',
-      'Shape executive succession, leadership development, and critical capability investment decisions',
-      'Establish organization-wide standards for performance, potential, and development practices',
-      'Ensure talent strategy creates measurable long-term capability and leadership strength'
-    ]
+  communication: {
+    1: {
+      A: [
+        'Communicate basic information clearly with guidance',
+        'Listen and ask questions when unsure',
+        'Share progress updates when requested',
+        'Document work with templates provided',
+        'Attend and listen in meetings'
+      ],
+      B: [
+        'Communicate clearly in writing and verbally',
+        'Actively listen and ask clarifying questions',
+        'Share progress updates regularly without prompting',
+        'Document work appropriately',
+        'Participate constructively in meetings'
+      ],
+      C: [
+        'Communicate complex information clearly',
+        'Ask insightful questions that improve outcomes',
+        'Provide updates that anticipate stakeholder needs',
+        'Create documentation others find valuable',
+        'Contribute meaningfully to meeting outcomes'
+      ],
+      D: [
+        'Adapt communication style for different audiences',
+        'Help others improve their questioning skills',
+        'Set example for proactive communication',
+        'Establish documentation practices for the team',
+        'Help facilitate productive meetings'
+      ]
+    },
+    2: {
+      A: [
+        'Present ideas to team with some preparation support',
+        'Write documentation with guidance on structure',
+        'Receive feedback openly and act on it',
+        'Adjust communication for familiar audiences',
+        'Participate in group discussions'
+      ],
+      B: [
+        'Present ideas clearly to team',
+        'Write clear technical documentation',
+        'Give and receive feedback constructively',
+        'Adapt communication to different audiences',
+        'Facilitate small group discussions'
+      ],
+      C: [
+        'Present complex ideas persuasively',
+        'Create documentation that becomes team reference',
+        'Provide feedback that accelerates others growth',
+        'Communicate effectively with any audience',
+        'Lead productive team discussions'
+      ],
+      D: [
+        'Coach others on presentation skills',
+        'Define documentation standards for the team',
+        'Build feedback culture within the team',
+        'Help others adapt their communication',
+        'Facilitate difficult team conversations'
+      ]
+    },
+    3: {
+      A: [
+        'Present to stakeholders with preparation support',
+        'Influence peers through clear reasoning',
+        'Participate in difficult conversations constructively',
+        'Help create alignment within the team',
+        'Support others in improving communication'
+      ],
+      B: [
+        'Present to stakeholders confidently',
+        'Influence without authority effectively',
+        'Navigate difficult conversations successfully',
+        'Create alignment across teams',
+        'Mentor others on communication skills'
+      ],
+      C: [
+        'Present to senior stakeholders compellingly',
+        'Influence decisions at organisational level',
+        'Lead resolution of difficult conversations',
+        'Build alignment on complex, contentious topics',
+        'Develop communication skills across the team'
+      ],
+      D: [
+        'Present to executives with impact',
+        'Shape organisational decisions through influence',
+        'Coach others through difficult conversations',
+        'Create lasting alignment on strategic topics',
+        'Build communication excellence in the team'
+      ]
+    },
+    4: {
+      A: [
+        'Communicate strategy to team with support',
+        'Present to leadership with preparation',
+        'Contribute to consensus on complex issues',
+        'Represent team in cross-functional settings',
+        'Support organisational communication'
+      ],
+      B: [
+        'Communicate strategy to team effectively',
+        'Present to senior leadership confidently',
+        'Build consensus on complex issues',
+        'Represent team externally with impact',
+        'Drive organisational communication'
+      ],
+      C: [
+        'Shape how strategy is communicated',
+        'Influence senior leadership decisions',
+        'Lead consensus-building on strategic issues',
+        'Build team external reputation',
+        'Define organisational communication patterns'
+      ],
+      D: [
+        'Define strategic communication standards',
+        'Present to board and executives',
+        'Navigate the most complex consensus challenges',
+        'Position team as thought leaders',
+        'Transform organisational communication'
+      ]
+    },
+    5: {
+      A: [
+        'Contribute to executive presentations',
+        'Support company narrative development',
+        'Participate in change communication',
+        'Help build external relationships',
+        'Support leadership communication development'
+      ],
+      B: [
+        'Present to executives and board effectively',
+        'Shape company narrative',
+        'Lead change communication',
+        'Build strategic external relationships',
+        'Coach leaders on communication'
+      ],
+      C: [
+        'Influence board-level decisions',
+        'Define company narrative and messaging',
+        'Lead communication through major change',
+        'Build relationships with industry leaders',
+        'Develop executive communication capability'
+      ],
+      D: [
+        'Shape board and investor communication',
+        'Position company narrative in the market',
+        'Transform organisation through communication',
+        'Build strategic partnerships through relationships',
+        'Set standard for executive communication'
+      ]
+    },
+    6: {
+      A: [
+        'Support external company representation',
+        'Contribute to industry conversations',
+        'Help communicate vision compellingly',
+        'Support strategic relationship building',
+        'Participate in communication leadership'
+      ],
+      B: [
+        'Represent company externally with impact',
+        'Shape industry conversations',
+        'Communicate vision compellingly',
+        'Build strategic relationships',
+        'Lead through communication'
+      ],
+      C: [
+        'Position company as industry voice',
+        'Lead industry conversations',
+        'Inspire through visionary communication',
+        'Build transformational partnerships',
+        'Define communication as leadership tool'
+      ],
+      D: [
+        'Define industry narrative',
+        'Shape industry direction through communication',
+        'Communicate vision that transforms markets',
+        'Build partnerships that reshape industry',
+        'Set new standards for leadership communication'
+      ]
+    }
   },
-  employee: {
-    1: [
-      'Handle straightforward employee queries accurately and escalate sensitive cases in a timely way',
-      'Support case documentation with clear records, factual notes, and policy references',
-      'Coach managers on basic people process steps using approved guidance'
-    ],
-    2: [
-      'Independently manage routine employee relations cases such as attendance, conduct, capability, or grievances within policy',
-      'Coach managers to handle conversations fairly, respectfully, and with appropriate documentation',
-      'Identify wellbeing, inclusion, or team climate concerns and recommend practical support actions',
-      'Balance empathy, consistency, legal awareness, and business needs in case handling'
-    ],
-    3: [
-      'Lead complex or high-risk employee relations matters, including cases involving multiple stakeholders or significant business impact',
-      'Guide managers on early intervention, conflict resolution, and durable people solutions rather than process-only responses',
-      'Use case patterns to identify systemic leadership, policy, or culture issues',
-      'Support psychologically safe and inclusive management practices across the business area'
-    ],
-    4: [
-      'Set approach and quality standards for sensitive employee relations and manager coaching across a major area',
-      'Advise senior leaders on high-profile people risks, reputational concerns, and cultural implications',
-      'Use employee relations trends to drive preventive interventions in leadership behavior, manager capability, or policy clarity',
-      'Build consistency in wellbeing and employee experience practices across teams or functions'
-    ],
-    5: [
-      'Shape enterprise approach to employee relations, leadership conduct, and workforce wellbeing in line with risk appetite and culture',
-      'Provide executive-level judgment on the most sensitive people matters and their organizational implications',
-      'Establish preventive frameworks that reduce repeated employee relations issues through stronger management practice and culture design',
-      'Ensure employee relations strategy supports trust, fairness, and long-term organizational health'
-    ]
+  teamwork: {
+    1: {
+      A: [
+        'Work cooperatively with immediate team members',
+        'Offer help when you have capacity',
+        'Share knowledge when asked',
+        'Attend team activities',
+        'Be friendly and approachable'
+      ],
+      B: [
+        'Work well with all immediate team members',
+        'Support teammates proactively when needed',
+        'Share knowledge willingly',
+        'Participate actively in team activities',
+        'Build positive relationships'
+      ],
+      C: [
+        'Strengthen team dynamics through positive interactions',
+        'Anticipate when teammates need support',
+        'Actively share knowledge and create learning opportunities',
+        'Help organise team activities',
+        'Build relationships across the team'
+      ],
+      D: [
+        'Model excellent teamwork for others',
+        'Create supportive environment for the team',
+        'Build knowledge sharing into team practices',
+        'Lead team building initiatives',
+        'Connect team members to build stronger bonds'
+      ]
+    },
+    2: {
+      A: [
+        'Collaborate with people in different roles',
+        'Support new team members when asked',
+        'Participate in team culture activities',
+        'Handle disagreements professionally',
+        'Balance team needs with personal goals'
+      ],
+      B: [
+        'Collaborate effectively across roles',
+        'Help onboard new team members proactively',
+        'Contribute positively to team culture',
+        'Resolve conflicts constructively',
+        'Prioritise team goals over personal recognition'
+      ],
+      C: [
+        'Build strong working relationships across roles',
+        'Create effective onboarding experiences',
+        'Shape team culture positively',
+        'Mediate conflicts between others',
+        'Inspire others to prioritise team success'
+      ],
+      D: [
+        'Define collaboration patterns across roles',
+        'Build onboarding programmes for the team',
+        'Lead team culture initiatives',
+        'Coach others on conflict resolution',
+        'Model selfless teamwork consistently'
+      ]
+    },
+    3: {
+      A: [
+        'Work effectively with other teams',
+        'Support collaborative initiatives',
+        'Contribute to inclusive environment',
+        'Pair with others to share knowledge',
+        'Support team effectiveness discussions'
+      ],
+      B: [
+        'Build bridges across teams effectively',
+        'Lead collaborative initiatives',
+        'Create inclusive environment for all',
+        'Develop others through regular pairing',
+        'Drive team effectiveness improvements'
+      ],
+      C: [
+        'Create lasting cross-team relationships',
+        'Lead complex multi-team initiatives',
+        'Champion inclusion and belonging',
+        'Build pairing and mentoring culture',
+        'Transform team effectiveness'
+      ],
+      D: [
+        'Define cross-team collaboration patterns',
+        'Lead organisation-wide collaborative initiatives',
+        'Shape inclusion strategy for the org',
+        'Build mentoring programmes',
+        'Set standards for team effectiveness'
+      ]
+    },
+    4: {
+      A: [
+        'Support building high-performing team',
+        'Contribute to psychological safety',
+        'Help develop team capabilities',
+        'Navigate team dynamics constructively',
+        'Support collaborative culture'
+      ],
+      B: [
+        'Build high-performing teams',
+        'Foster psychological safety',
+        'Develop team capabilities systematically',
+        'Navigate organisational dynamics effectively',
+        'Create collaborative culture'
+      ],
+      C: [
+        'Transform teams into high-performing units',
+        'Make psychological safety a team strength',
+        'Build capability development programmes',
+        'Influence organisational dynamics positively',
+        'Define collaborative culture standards'
+      ],
+      D: [
+        'Set standards for high-performing teams',
+        'Champion psychological safety across org',
+        'Build organisation-wide capability development',
+        'Shape organisational dynamics',
+        'Transform collaboration at scale'
+      ]
+    },
+    5: {
+      A: [
+        'Support cross-department collaboration',
+        'Help develop team leaders',
+        'Contribute to organisational culture',
+        'Support building diverse teams',
+        'Participate in organisational health initiatives'
+      ],
+      B: [
+        'Build collaboration across department',
+        'Develop team leaders effectively',
+        'Shape organisational culture',
+        'Build diverse, inclusive teams',
+        'Drive organisational health'
+      ],
+      C: [
+        'Transform cross-department collaboration',
+        'Build leadership development programmes',
+        'Define organisational culture',
+        'Champion diversity and inclusion',
+        'Lead organisational health transformation'
+      ],
+      D: [
+        'Set standards for organisational collaboration',
+        'Develop world-class leaders',
+        'Shape culture as competitive advantage',
+        'Build industry-leading diverse organisation',
+        'Define organisational health standards'
+      ]
+    },
+    6: {
+      A: [
+        'Support company-wide collaboration',
+        'Contribute to company culture',
+        'Help develop senior leaders',
+        'Support strategic partnerships',
+        'Participate in creating organisational impact'
+      ],
+      B: [
+        'Build company-wide collaboration',
+        'Shape company culture',
+        'Develop senior leaders',
+        'Build strategic partnerships',
+        'Create lasting organisational impact'
+      ],
+      C: [
+        'Define company collaboration model',
+        'Transform company culture',
+        'Build executive leadership capability',
+        'Create transformational partnerships',
+        'Build organisation for long-term success'
+      ],
+      D: [
+        'Set industry standards for collaboration',
+        'Build culture recognised as world-class',
+        'Develop industry-leading executives',
+        'Build partnerships that reshape industry',
+        'Create lasting industry impact'
+      ]
+    }
   },
-  policy: {
-    1: [
-      'Apply established policies and procedures accurately in routine situations',
-      'Maintain proper documentation and record-keeping for compliance purposes',
-      'Recognize situations requiring escalation to senior HR or legal colleagues'
-    ],
-    2: [
-      'Interpret and apply policies flexibly while maintaining consistent standards',
-      'Identify policy gaps or inconsistencies and recommend practical improvements',
-      'Support managers in understanding compliance requirements and their obligations',
-      'Balance policy adherence with practical business needs appropriately'
-    ],
-    3: [
-      'Develop or refine policies for a business unit considering legal, cultural, and operational factors',
-      'Lead compliance reviews and audits, addressing findings systematically',
-      'Advise on complex policy interpretation where precedent or guidance is unclear',
-      'Build manager capability in policy application through coaching and clear guidance'
-    ],
-    4: [
-      'Lead policy development and governance across multiple business areas',
-      'Advise senior leaders on regulatory changes and their organizational implications',
-      'Establish policy review cycles and governance standards for the HR function',
-      'Integrate policy considerations into broader organizational change initiatives'
-    ],
-    5: [
-      'Shape enterprise policy strategy aligned with business model, risk appetite, and organizational values',
-      'Lead the organization response to significant regulatory or compliance changes',
-      'Establish governance frameworks that balance compliance with organizational agility',
-      'Ensure policy approach supports trust, fairness, and sustainable organizational health'
-    ]
+  problem: {
+    1: {
+      A: [
+        'Break down simple problems with guidance',
+        'Research solutions using provided resources',
+        'Ask for help when stuck on problems',
+        'Reflect on mistakes and learn from them',
+        'Apply logical thinking with support'
+      ],
+      B: [
+        'Break down problems into smaller parts independently',
+        'Research solutions independently',
+        'Know when to ask for help versus persist',
+        'Learn from mistakes and avoid repeating them',
+        'Apply logical thinking consistently'
+      ],
+      C: [
+        'Break down complex problems effectively',
+        'Find creative solutions through research',
+        'Help others know when to escalate',
+        'Share learnings from mistakes with team',
+        'Apply structured problem-solving approaches'
+      ],
+      D: [
+        'Teach others problem breakdown techniques',
+        'Build research skills in the team',
+        'Model effective help-seeking behaviour',
+        'Create learning culture from mistakes',
+        'Coach others on logical thinking'
+      ]
+    },
+    2: {
+      A: [
+        'Solve moderately complex problems with some support',
+        'Consider multiple solutions before deciding',
+        'Identify obvious root causes',
+        'Use data when available for decisions',
+        'Try new approaches when stuck'
+      ],
+      B: [
+        'Solve complex problems independently',
+        'Evaluate multiple solutions systematically',
+        'Identify root causes effectively',
+        'Make data-informed decisions',
+        'Learn and apply new problem-solving approaches'
+      ],
+      C: [
+        'Solve complex problems others struggle with',
+        'Help others evaluate solution options',
+        'Teach root cause analysis techniques',
+        'Champion data-driven decision making',
+        'Introduce new problem-solving methods to team'
+      ],
+      D: [
+        'Lead resolution of the most complex problems',
+        'Define solution evaluation frameworks',
+        'Build root cause analysis capability in team',
+        'Set standards for data-informed decisions',
+        'Build problem-solving culture'
+      ]
+    },
+    3: {
+      A: [
+        'Tackle ambiguous problems with guidance',
+        'Think about long-term implications of solutions',
+        'Consider trade-offs between options',
+        'Propose innovative solutions',
+        'Support others problem-solving development'
+      ],
+      B: [
+        'Solve ambiguous problems effectively',
+        'Think strategically about solutions',
+        'Balance short and long-term considerations',
+        'Drive innovative solutions',
+        'Mentor problem-solving skills in others'
+      ],
+      C: [
+        'Lead resolution of highly ambiguous problems',
+        'Shape strategic thinking in the team',
+        'Navigate complex trade-offs expertly',
+        'Create environment for innovation',
+        'Build problem-solving capability across team'
+      ],
+      D: [
+        'Define approaches for ambiguous problems',
+        'Set strategic thinking standards',
+        'Coach others through complex trade-offs',
+        'Lead innovation initiatives',
+        'Develop problem-solving leaders'
+      ]
+    },
+    4: {
+      A: [
+        'Contribute to solving organisational problems',
+        'Navigate trade-offs with awareness of impact',
+        'Support strategic decision-making',
+        'Encourage problem-solving mindset',
+        'Identify emerging challenges'
+      ],
+      B: [
+        'Solve organisational problems effectively',
+        'Navigate complex trade-offs confidently',
+        'Drive strategic decisions',
+        'Build problem-solving culture in team',
+        'Anticipate future challenges'
+      ],
+      C: [
+        'Lead resolution of cross-org problems',
+        'Navigate the most complex trade-offs',
+        'Shape strategic direction through decisions',
+        'Define problem-solving culture',
+        'Build systems to anticipate challenges'
+      ],
+      D: [
+        'Set standards for organisational problem-solving',
+        'Coach executives through trade-offs',
+        'Drive company-shaping decisions',
+        'Transform problem-solving at scale',
+        'Build organisational foresight capability'
+      ]
+    },
+    5: {
+      A: [
+        'Contribute to department-wide challenges',
+        'Support strategic initiative development',
+        'Navigate organisational complexity',
+        'Help build analytical capabilities',
+        'Participate in strategic direction setting'
+      ],
+      B: [
+        'Solve department-wide challenges',
+        'Drive strategic initiatives',
+        'Navigate organisational complexity expertly',
+        'Build analytical capabilities across teams',
+        'Shape strategic direction'
+      ],
+      C: [
+        'Lead resolution of company-wide challenges',
+        'Define strategic initiatives',
+        'Transform how org navigates complexity',
+        'Build world-class analytical capability',
+        'Drive strategic direction'
+      ],
+      D: [
+        'Set standards for solving major challenges',
+        'Shape company through strategic initiatives',
+        'Define how complexity is navigated',
+        'Build industry-leading analytical capability',
+        'Define company strategic direction'
+      ]
+    },
+    6: {
+      A: [
+        'Contribute to company-defining challenges',
+        'Support competitive advantage through problem-solving',
+        'Help navigate industry complexity',
+        'Participate in company strategy',
+        'Support building strategic capabilities'
+      ],
+      B: [
+        'Solve company-defining challenges',
+        'Drive competitive advantage through problem-solving',
+        'Navigate industry complexity',
+        'Shape company strategy',
+        'Build strategic capabilities'
+      ],
+      C: [
+        'Lead resolution of industry-defining challenges',
+        'Create sustained competitive advantage',
+        'Transform how industry complexity is navigated',
+        'Define company strategy',
+        'Build world-class strategic capabilities'
+      ],
+      D: [
+        'Set new standards for solving major challenges',
+        'Redefine competitive landscape',
+        'Shape how industry navigates complexity',
+        'Drive strategy that transforms markets',
+        'Build capabilities that define industry'
+      ]
+    }
   },
-  data: {
-    1: [
-      'Produce accurate reports using HR systems and standard templates',
-      'Maintain data quality through careful input and regular validation',
-      'Support basic workforce planning activities with reliable data'
-    ],
-    2: [
-      'Analyze people data to identify trends, risks, and opportunities for action',
-      'Contribute to workforce planning discussions with evidence-based insights',
-      'Use HR technology effectively to improve process efficiency',
-      'Present data clearly to support manager decision-making'
-    ],
-    3: [
-      'Lead data analysis projects that inform strategic people decisions',
-      'Develop workforce planning approaches for a business unit considering multiple scenarios',
-      'Identify opportunities to improve HR technology adoption and effectiveness',
-      'Build manager capability in using people data for decision-making'
-    ],
-    4: [
-      'Define analytics and workforce planning standards across multiple business areas',
-      'Lead HR technology initiatives that improve capability and efficiency',
-      'Advise senior leaders on workforce trends and their strategic implications',
-      'Integrate people data into broader business planning and decision processes'
-    ],
-    5: [
-      'Shape enterprise people analytics and workforce planning strategy',
-      'Define HR technology roadmap aligned with organizational capability needs',
-      'Establish standards for data governance and analytics across the organization',
-      'Ensure people data strategy creates measurable business value and insight'
-    ]
+  patient: {
+    1: {
+      A: [
+        'Learn about basic patient needs and context',
+        'Consider patient impact when prompted',
+        'Follow patient safety guidelines with guidance',
+        'Ask questions about healthcare context',
+        'Support patient-focused decisions made by others'
+      ],
+      B: [
+        'Understand basic patient needs',
+        'Consider patient impact in all work',
+        'Follow patient safety guidelines consistently',
+        'Learn actively about healthcare context',
+        'Support patient-focused decisions proactively'
+      ],
+      C: [
+        'Anticipate patient needs in your work',
+        'Prioritise patient impact in decisions',
+        'Champion patient safety in the team',
+        'Apply healthcare knowledge to improve work',
+        'Advocate for patient-focused decisions'
+      ],
+      D: [
+        'Help others understand patient needs',
+        'Model patient-first thinking',
+        'Improve patient safety practices',
+        'Share healthcare context knowledge',
+        'Lead patient-focused decision discussions'
+      ]
+    },
+    2: {
+      A: [
+        'Consider patient needs in feature work',
+        'Learn about the patient journey',
+        'Recognise tension between patient and business needs',
+        'Contribute to patient outcomes in your work',
+        'Build healthcare domain knowledge'
+      ],
+      B: [
+        'Advocate for patient needs in discussions',
+        'Understand patient journey deeply',
+        'Balance patient and business needs appropriately',
+        'Contribute meaningfully to patient outcomes',
+        'Apply healthcare knowledge effectively'
+      ],
+      C: [
+        'Champion patient needs across the team',
+        'Improve patient journey through your work',
+        'Navigate patient/business trade-offs expertly',
+        'Drive improvements in patient outcomes',
+        'Build healthcare expertise in the team'
+      ],
+      D: [
+        'Shape how team thinks about patient needs',
+        'Lead patient journey improvements',
+        'Coach others on patient/business balance',
+        'Lead patient outcome initiatives',
+        'Develop healthcare expertise in others'
+      ]
+    },
+    3: {
+      A: [
+        'Identify opportunities to improve patient experience',
+        'Contribute to product decisions affecting patients',
+        'Understand commercial context of work',
+        'Navigate competing priorities with awareness',
+        'Support patient voice in discussions'
+      ],
+      B: [
+        'Drive patient-focused improvements',
+        'Influence product direction for patients',
+        'Understand commercial context deeply',
+        'Balance competing priorities effectively',
+        'Champion patient voice consistently'
+      ],
+      C: [
+        'Lead patient experience transformation',
+        'Shape product strategy for patient benefit',
+        'Drive commercial outcomes through patient focus',
+        'Navigate complex priority trade-offs',
+        'Build patient advocacy culture'
+      ],
+      D: [
+        'Define patient experience standards',
+        'Drive product vision for patients',
+        'Connect patient focus to commercial success',
+        'Coach others through priority conflicts',
+        'Shape patient-first culture'
+      ]
+    },
+    4: {
+      A: [
+        'Contribute to patient-focused standards',
+        'Support commercial outcome achievement',
+        'Help build patient-centric culture',
+        'Understand regulatory requirements',
+        'Participate in patient initiatives'
+      ],
+      B: [
+        'Set patient-focused standards for team',
+        'Drive commercial outcomes',
+        'Build patient-centric culture',
+        'Navigate regulatory requirements effectively',
+        'Lead patient initiatives'
+      ],
+      C: [
+        'Define patient standards across teams',
+        'Transform commercial outcomes',
+        'Shape patient-centric culture at scale',
+        'Lead regulatory compliance strategy',
+        'Drive strategic patient initiatives'
+      ],
+      D: [
+        'Set industry-leading patient standards',
+        'Drive commercial strategy',
+        'Define patient-centric culture',
+        'Shape regulatory approach',
+        'Lead company-wide patient transformation'
+      ]
+    },
+    5: {
+      A: [
+        'Contribute to patient strategy',
+        'Support business growth initiatives',
+        'Help build healthcare partnerships',
+        'Support regulatory compliance',
+        'Participate in market initiatives'
+      ],
+      B: [
+        'Shape patient strategy',
+        'Drive business growth',
+        'Build healthcare partnerships',
+        'Ensure regulatory compliance',
+        'Lead market initiatives'
+      ],
+      C: [
+        'Define patient strategy',
+        'Transform business growth',
+        'Build strategic healthcare partnerships',
+        'Shape regulatory strategy',
+        'Drive market transformation'
+      ],
+      D: [
+        'Set visionary patient strategy',
+        'Drive industry-leading growth',
+        'Build partnerships that reshape healthcare',
+        'Lead regulatory innovation',
+        'Define market direction'
+      ]
+    },
+    6: {
+      A: [
+        'Contribute to patient vision',
+        'Support company growth strategy',
+        'Participate in shaping healthcare industry',
+        'Support strategic partnership building',
+        'Contribute to market transformation'
+      ],
+      B: [
+        'Define patient vision',
+        'Drive company growth',
+        'Shape healthcare industry',
+        'Build strategic partnerships',
+        'Lead market transformation'
+      ],
+      C: [
+        'Set visionary patient direction',
+        'Transform company growth trajectory',
+        'Lead healthcare industry change',
+        'Build transformational partnerships',
+        'Redefine market'
+      ],
+      D: [
+        'Define industry patient vision',
+        'Drive growth that transforms industry',
+        'Shape healthcare globally',
+        'Build partnerships that transform healthcare',
+        'Create new market paradigms'
+      ]
+    }
   },
-  stakeholder: {
-    1: [
-      'Build positive working relationships with managers and HR colleagues',
-      'Communicate HR information clearly and respond helpfully to queries',
-      'Adapt communication style appropriately for different audiences'
-    ],
-    2: [
-      'Influence manager decisions through credible advice and practical support',
-      'Build trusted relationships across the business area you support',
-      'Navigate disagreements constructively while maintaining relationships',
-      'Present HR perspectives effectively in business discussions'
-    ],
-    3: [
-      'Influence senior stakeholders on people priorities and organizational decisions',
-      'Build coalitions across functions to advance people initiatives',
-      'Navigate complex stakeholder dynamics and competing priorities',
-      'Represent HR credibly in leadership forums and business planning'
-    ],
-    4: [
-      'Shape senior leadership thinking on people, organization, and culture matters',
-      'Build strategic partnerships across the organization to advance people priorities',
-      'Influence organizational decisions at executive level through evidence and judgment',
-      'Model effective stakeholder engagement for the HR function'
-    ],
-    5: [
-      'Influence executive and board-level decisions on strategic people matters',
-      'Build external relationships that enhance organizational capability and reputation',
-      'Shape how the organization engages with external stakeholders on people topics',
-      'Establish standards for stakeholder engagement across the HR function'
-    ]
+  leadership: {
+    1: {
+      A: [
+        'Take responsibility for completing assigned work',
+        'Show initiative on simple tasks when prompted',
+        'Support team decisions when explained',
+        'Follow team examples and norms',
+        'Reflect on own strengths and areas to develop'
+      ],
+      B: [
+        'Take full ownership of own work',
+        'Show initiative on tasks without prompting',
+        'Support team decisions actively',
+        'Lead by example in daily work',
+        'Develop self-awareness actively'
+      ],
+      C: [
+        'Take ownership beyond assigned work',
+        'Drive improvements proactively',
+        'Help shape team decisions',
+        'Model behaviours others follow',
+        'Seek feedback to accelerate growth'
+      ],
+      D: [
+        'Take ownership of team outcomes',
+        'Lead improvement initiatives',
+        'Influence team decisions positively',
+        'Set example that elevates team standards',
+        'Help others develop self-awareness'
+      ]
+    },
+    2: {
+      A: [
+        'Lead simple initiatives with support',
+        'Influence peers through your work',
+        'Take responsibility for your outcomes',
+        'Support team leadership activities',
+        'Learn leadership skills actively'
+      ],
+      B: [
+        'Lead small initiatives independently',
+        'Influence peers positively',
+        'Take responsibility for outcomes',
+        'Support team leadership',
+        'Develop leadership skills'
+      ],
+      C: [
+        'Lead meaningful initiatives',
+        'Influence beyond immediate peers',
+        'Take responsibility for team outcomes',
+        'Contribute to team leadership',
+        'Apply leadership skills effectively'
+      ],
+      D: [
+        'Lead complex initiatives',
+        'Influence across the team',
+        'Drive accountability culture',
+        'Share leadership responsibilities',
+        'Coach others on leadership'
+      ]
+    },
+    3: {
+      A: [
+        'Lead projects with guidance on people aspects',
+        'Support development of junior team members',
+        'Contribute to team improvements',
+        'Make decisions with awareness of impact',
+        'Build leadership credibility'
+      ],
+      B: [
+        'Lead projects and people effectively',
+        'Develop junior team members actively',
+        'Drive team improvements',
+        'Make difficult decisions when needed',
+        'Build leadership presence'
+      ],
+      C: [
+        'Lead complex projects with multiple stakeholders',
+        'Build development programmes for juniors',
+        'Transform team effectiveness',
+        'Navigate difficult decisions confidently',
+        'Establish strong leadership presence'
+      ],
+      D: [
+        'Lead the most complex initiatives',
+        'Develop other mentors and leaders',
+        'Set standards for team excellence',
+        'Coach others through difficult decisions',
+        'Model leadership others aspire to'
+      ]
+    },
+    4: {
+      A: [
+        'Support team leadership and development',
+        'Contribute to team direction',
+        'Help build leadership pipeline',
+        'Navigate team dynamics',
+        'Support organisational change'
+      ],
+      B: [
+        'Lead and develop teams effectively',
+        'Set team direction clearly',
+        'Build leadership pipeline',
+        'Navigate organisational politics',
+        'Drive organisational change'
+      ],
+      C: [
+        'Build high-performing teams consistently',
+        'Shape direction across teams',
+        'Develop strong leaders',
+        'Influence organisational dynamics',
+        'Lead significant organisational change'
+      ],
+      D: [
+        'Set standards for team leadership',
+        'Define direction at org level',
+        'Build leadership development programmes',
+        'Shape organisational dynamics',
+        'Lead transformational change'
+      ]
+    },
+    5: {
+      A: [
+        'Support leadership of multiple teams',
+        'Help develop senior leaders',
+        'Contribute to department strategy',
+        'Participate in company initiatives',
+        'Support building organisational capability'
+      ],
+      B: [
+        'Lead multiple teams effectively',
+        'Develop senior leaders',
+        'Shape department strategy',
+        'Drive company initiatives',
+        'Build organisational capability'
+      ],
+      C: [
+        'Transform multiple teams',
+        'Build leadership programmes',
+        'Define department strategy',
+        'Lead company-wide initiatives',
+        'Build world-class capability'
+      ],
+      D: [
+        'Set standards for multi-team leadership',
+        'Develop executive leaders',
+        'Drive company strategy',
+        'Lead transformational initiatives',
+        'Build industry-leading capability'
+      ]
+    },
+    6: {
+      A: [
+        'Support organisational leadership',
+        'Contribute to company direction',
+        'Help build executive team',
+        'Participate in company transformation',
+        'Support shaping industry leadership'
+      ],
+      B: [
+        'Lead organisation effectively',
+        'Set company direction',
+        'Build executive team',
+        'Drive company transformation',
+        'Shape industry leadership'
+      ],
+      C: [
+        'Transform organisation',
+        'Define company direction',
+        'Build world-class executive team',
+        'Lead company transformation',
+        'Define industry leadership'
+      ],
+      D: [
+        'Set new standards for organisational leadership',
+        'Drive visionary company direction',
+        'Build executive team recognised globally',
+        'Transform industry through leadership',
+        'Redefine what leadership means'
+      ]
+    }
   }
 };
 
 // ========== STATE ==========
 let currentUser = null;
+let currentView = 'full';
 let checkedBehaviours = {};
 
 // ========== FUNCTIONS ==========
@@ -454,11 +1571,12 @@ function handleLogin() {
   
   if (user && user.password === password) {
     currentUser = { email, ...user };
-    const saved = localStorage.getItem(`hrbp_progress_${email}`);
+    const saved = localStorage.getItem(`progress_${email}`);
     if (saved) {
       const parsed = JSON.parse(saved);
       checkedBehaviours = parsed.checked || {};
       if (parsed.level) currentUser.level = parsed.level;
+      if (parsed.sublevel) currentUser.sublevel = parsed.sublevel;
     } else {
       checkedBehaviours = {};
     }
@@ -482,7 +1600,8 @@ function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('app').classList.add('active');
   renderProfile();
-  renderLevelNodes();
+  renderLevelPills();
+  renderSublevelPills();
   renderSkills();
 }
 
@@ -491,33 +1610,47 @@ function getInitials(name) {
 }
 
 function getCurrentTitle() {
-  return levels[currentUser.level - 1].title;
+  const track = tracks[currentUser.track];
+  const title = track.titles[currentUser.level - 1];
+  return `${title} ${currentUser.level}${currentUser.sublevel}`;
+}
+
+function getBonus() {
+  return bonusRates[currentUser.level][currentUser.sublevel];
 }
 
 function renderProfile() {
   const initials = getInitials(currentUser.name);
+  const track = tracks[currentUser.track];
   
   document.getElementById('userAvatar').textContent = initials;
   document.getElementById('userName').textContent = currentUser.name;
   document.getElementById('profileAvatar').textContent = initials;
   document.getElementById('profileName').textContent = currentUser.name;
   document.getElementById('profileTitle').textContent = getCurrentTitle();
-  document.getElementById('profileTrack').textContent = `👥 ${getCurrentTitle()}`;
+  document.getElementById('profileTrack').textContent = `${track.icon} ${track.name}`;
+  document.getElementById('profileBonus').textContent = `💰 ${getBonus()}% Bonus`;
   
   const progress = calculateCurrentProgress();
   document.getElementById('profileProgress').textContent = `✅ ${progress}% Complete`;
+  
+  document.getElementById('sublevelCurrent').textContent = `Level ${currentUser.level}${currentUser.sublevel}`;
+  document.getElementById('sublevelDesc').textContent = sublevelDescriptions[currentUser.sublevel].desc;
+  
+  renderSublevelTrack();
 }
 
 function calculateCurrentProgress() {
   let total = 0;
   let checked = 0;
   const level = currentUser.level;
+  const sublevel = currentUser.sublevel;
   
   skills.forEach(skill => {
-    const behavs = behaviours[skill.id][level] || [];
+    const behavs = behaviours[skill.id][level]?.[sublevel] || [];
     behavs.forEach((_, idx) => {
       total++;
-      const key = `${skill.id}-${level}-${idx}`;
+      const key = `${skill.id}-${level}-${sublevel}-${idx}`;
       if (checkedBehaviours[key]) checked++;
     });
   });
@@ -525,32 +1658,70 @@ function calculateCurrentProgress() {
   return total > 0 ? Math.round((checked / total) * 100) : 0;
 }
 
-function renderLevelNodes() {
-  const container = document.getElementById('levelNodes');
-  container.innerHTML = '';
+function renderSublevelTrack() {
+  const track = document.getElementById('sublevelTrack');
+  track.innerHTML = '';
   
-  levels.forEach((lvl, idx) => {
+  const currentIdx = sublevels.indexOf(currentUser.sublevel);
+  
+  sublevels.forEach((sl, idx) => {
     if (idx > 0) {
       const connector = document.createElement('div');
-      connector.className = 'level-connector' + (idx < currentUser.level ? ' completed' : '');
-      container.appendChild(connector);
+      connector.className = 'sublevel-connector' + (idx <= currentIdx ? ' completed' : '');
+      track.appendChild(connector);
     }
     
     const node = document.createElement('div');
-    node.className = 'level-node';
+    node.className = 'sublevel-node';
     
-    let dotClass = 'level-dot';
-    if (idx + 1 < currentUser.level) dotClass += ' completed';
-    else if (idx + 1 === currentUser.level) dotClass += ' current';
+    let dotClass = 'sublevel-dot';
+    if (idx < currentIdx) dotClass += ' completed';
+    else if (idx === currentIdx) dotClass += ' current';
     
-    let labelClass = 'level-label';
-    if (idx + 1 === currentUser.level) labelClass += ' current';
+    let labelClass = 'sublevel-label';
+    if (idx === currentIdx) labelClass += ' current';
     
     node.innerHTML = `
-      <div class="${dotClass}">${idx + 1}</div>
-      <div class="${labelClass}">${lvl.short}</div>
+      <div class="${dotClass}">${currentUser.level}${sl}</div>
+      <div class="${labelClass}">${sublevelDescriptions[sl].name}</div>
     `;
-    container.appendChild(node);
+    track.appendChild(node);
+  });
+}
+
+function renderLevelPills() {
+  const container = document.getElementById('levelPills');
+  const track = tracks[currentUser.track];
+  container.innerHTML = '';
+  
+  track.titles.forEach((title, idx) => {
+    const level = idx + 1;
+    let pillClass = 'level-pill';
+    if (level < currentUser.level) pillClass += ' completed';
+    else if (level === currentUser.level) pillClass += ' current';
+    
+    const pill = document.createElement('div');
+    pill.className = pillClass;
+    pill.innerHTML = `<span class="dot"></span>${title}`;
+    container.appendChild(pill);
+  });
+}
+
+function renderSublevelPills() {
+  const container = document.getElementById('sublevelPills');
+  container.innerHTML = '<span class="sublevel-pill-label">Sub-levels:</span>';
+  
+  const currentIdx = sublevels.indexOf(currentUser.sublevel);
+  
+  sublevels.forEach((sl, idx) => {
+    const pill = document.createElement('div');
+    let pillClass = 'sublevel-pill';
+    if (idx < currentIdx) pillClass += ' completed';
+    else if (idx === currentIdx) pillClass += ' current';
+    
+    pill.className = pillClass;
+    pill.textContent = `${currentUser.level}${sl} - ${sublevelDescriptions[sl].name}`;
+    container.appendChild(pill);
   });
 }
 
@@ -591,11 +1762,12 @@ function calculateSkillProgress(skillId) {
   let total = 0;
   let checked = 0;
   const level = currentUser.level;
+  const sublevel = currentUser.sublevel;
   
-  const behavs = behaviours[skillId][level] || [];
+  const behavs = behaviours[skillId][level]?.[sublevel] || [];
   behavs.forEach((_, idx) => {
     total++;
-    const key = `${skillId}-${level}-${idx}`;
+    const key = `${skillId}-${level}-${sublevel}-${idx}`;
     if (checkedBehaviours[key]) checked++;
   });
   
@@ -603,23 +1775,23 @@ function calculateSkillProgress(skillId) {
 }
 
 function renderSkillLevels(skill) {
-  const currentLevel = currentUser.level;
+  const level = currentUser.level;
+  const currentSublevelIdx = sublevels.indexOf(currentUser.sublevel);
   
-  let html = '<div class="levels-grid">';
+  let html = `<div class="levels-grid ${currentView === 'full' ? 'full-view' : ''}">`;
   
-  levels.forEach((lvl, lvlIdx) => {
-    const levelNum = lvlIdx + 1;
-    const behavs = behaviours[skill.id][levelNum] || [];
+  sublevels.forEach((sl, slIdx) => {
+    const behavs = behaviours[skill.id][level]?.[sl] || [];
     
     let columnClass = 'level-column';
     let badge = '';
     let badgeClass = '';
     
-    if (levelNum < currentLevel) {
+    if (slIdx < currentSublevelIdx) {
       columnClass += ' completed';
       badge = 'Completed';
       badgeClass = 'completed';
-    } else if (levelNum === currentLevel) {
+    } else if (slIdx === currentSublevelIdx) {
       columnClass += ' current';
       badge = 'Current';
       badgeClass = '';
@@ -633,27 +1805,27 @@ function renderSkillLevels(skill) {
       <div class="${columnClass}">
         <div class="level-column-header">
           <div class="level-column-title">
-            Level ${levelNum}
+            ${level}${sl}
             <span class="badge ${badgeClass}">${badge}</span>
           </div>
-          <div class="level-column-subtitle">${lvl.short}</div>
+          <div class="level-column-subtitle">${sublevelDescriptions[sl].name}</div>
         </div>
         <div class="level-column-body">
     `;
     
     behavs.forEach((behav, idx) => {
-      const key = `${skill.id}-${levelNum}-${idx}`;
+      const key = `${skill.id}-${level}-${sl}-${idx}`;
       
       let checkboxClass = 'behaviour-checkbox';
       let isDisabled = false;
       let isChecked = false;
       let textClass = 'behaviour-text';
       
-      if (levelNum < currentLevel) {
+      if (slIdx < currentSublevelIdx) {
         checkboxClass += ' auto-checked';
         isChecked = true;
         isDisabled = true;
-      } else if (levelNum === currentLevel) {
+      } else if (slIdx === currentSublevelIdx) {
         isChecked = checkedBehaviours[key] === true;
         if (isChecked) checkboxClass += ' checked';
       } else {
@@ -726,12 +1898,23 @@ function updateProgressDisplays() {
 function checkForPromotion() {
   const progress = calculateCurrentProgress();
   
-  if (progress === 100 && currentUser.level < 5) {
-    currentUser.level++;
+  if (progress === 100) {
+    const currentIdx = sublevels.indexOf(currentUser.sublevel);
+    
+    if (currentIdx < sublevels.length - 1) {
+      currentUser.sublevel = sublevels[currentIdx + 1];
+    } else if (currentUser.level < 6) {
+      currentUser.level++;
+      currentUser.sublevel = 'A';
+    } else {
+      return;
+    }
+    
     saveProgress();
     showPromotionToast();
     renderProfile();
-    renderLevelNodes();
+    renderLevelPills();
+    renderSublevelPills();
     renderSkills();
   }
 }
@@ -752,17 +1935,31 @@ function saveProgress() {
   
   const data = {
     checked: checkedBehaviours,
-    level: currentUser.level
+    level: currentUser.level,
+    sublevel: currentUser.sublevel
   };
   
-  localStorage.setItem(`hrbp_progress_${currentUser.email}`, JSON.stringify(data));
+  localStorage.setItem(`progress_${currentUser.email}`, JSON.stringify(data));
+}
+
+function setView(view) {
+  currentView = view;
+  document.getElementById('focusedBtn').classList.toggle('active', view === 'focused');
+  document.getElementById('fullBtn').classList.toggle('active', view === 'full');
+  
+  document.querySelectorAll('.levels-grid').forEach(grid => {
+    grid.classList.toggle('full-view', view === 'full');
+  });
 }
 
 function exportAssessment() {
-  let content = `SIMPLE ONLINE HEALTHCARE - HR BUSINESS PARTNER PROGRESSION\n`;
+  const track = tracks[currentUser.track];
+  let content = `SIMPLE ONLINE HEALTHCARE - CAREER PROGRESSION ASSESSMENT\n`;
   content += `${'='.repeat(60)}\n\n`;
   content += `Name: ${currentUser.name}\n`;
+  content += `Track: ${track.name}\n`;
   content += `Current Level: ${getCurrentTitle()}\n`;
+  content += `Bonus Rate: ${getBonus()}%\n`;
   content += `Overall Progress: ${calculateCurrentProgress()}%\n`;
   content += `Export Date: ${new Date().toLocaleDateString()}\n\n`;
   content += `${'='.repeat(60)}\n\n`;
@@ -773,10 +1970,11 @@ function exportAssessment() {
     content += `${'-'.repeat(40)}\n`;
     
     const level = currentUser.level;
-    const behavs = behaviours[skill.id][level] || [];
+    const sublevel = currentUser.sublevel;
+    const behavs = behaviours[skill.id][level]?.[sublevel] || [];
     
     behavs.forEach((behav, idx) => {
-      const key = `${skill.id}-${level}-${idx}`;
+      const key = `${skill.id}-${level}-${sublevel}-${idx}`;
       const checked = checkedBehaviours[key] ? '✓' : '○';
       content += `  ${checked} ${behav}\n`;
     });
@@ -788,7 +1986,7 @@ function exportAssessment() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `hrbp-progression-${currentUser.name.replace(/\s+/g, '-').toLowerCase()}.txt`;
+  a.download = `progression-assessment-${currentUser.name.replace(/\s+/g, '-').toLowerCase()}.txt`;
   a.click();
   URL.revokeObjectURL(url);
 }
