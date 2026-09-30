@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Online Healthcare - HR Business Partner Progression</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00A89D;
+      --primary-light: #00C4B8;
+      --primary-dark: #008C83;
+      --secondary: #1E3A5F;
+      --bg: #F7FAFA;
+      --card: #ffffff;
+      --text: #1E3A5F;
+      --text-light: #5C7A99;
+      --border: #E0EDED;
+      --success: #00A89D;
+      --success-light: #E6F7F6;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    .login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%); padding: 20px; }
+    .login-card { background: white; padding: 48px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); width: 100%; max-width: 420px; }
+    .login-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .login-logo-icon { width: 44px; height: 44px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 20px; }
+    .login-logo-text { font-size: 22px; font-weight: 800; color: var(--secondary); }
+    .login-subtitle { color: var(--text-light); margin-bottom: 32px; font-size: 15px; }
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .form-input { width: 100%; padding: 14px 16px; border: 2px solid var(--border); border-radius: 12px; font-size: 15px; transition: all 0.2s; }
+    .form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 168, 157, 0.1); }
+    .login-btn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; }
+    .login-btn:hover { background: var(--primary-dark); }
+    .error-msg { background: #fef2f2; color: #dc2626; padding: 12px 16px; border-radius: 10px; margin-bottom: 20px; font-size: 14px; display: none; }
+    .app { display: none; min-height: 100vh; }
+    .app.active { display: block; }
+    .header { background: white; border-bottom: 1px solid var(--border); padding: 0 32px; position: sticky; top: 0; z-index: 100; }
+    .header-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; color: var(--secondary); }
+    .logo-icon { width: 36px; height: 36px; background: var(--primary); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; }
+    .header-right { display: flex; align-items: center; gap: 16px; }
+    .export-btn { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .user-pill { display: flex; align-items: center; gap: 10px; background: var(--bg); padding: 6px 14px 6px 6px; border-radius: 100px; }
+    .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 12px; }
+    .user-name { font-weight: 600; font-size: 13px; }
+    .logout-btn { background: none; border: none; color: var(--text-light); font-size: 13px; cursor: pointer; }
+    .profile-section { background: linear-gradient(135deg, var(--secondary) 0%, #2D4A6F 100%); color: white; padding: 48px 32px; }
+    .profile-inner { max-width: 1400px; margin: 0 auto; }
+    .profile-top { display: flex; align-items: center; gap: 32px; margin-bottom: 32px; }
+    .profile-avatar { width: 80px; height: 80px; border-radius: 20px; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 800; }
+    .profile-info h1 { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+    .profile-title { font-size: 18px; opacity: 0.9; }
+    .profile-meta { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; }
+    .profile-badge { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 100px; font-size: 14px; }
+    .profile-badge.current { background: var(--primary); }
+    .level-track { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; }
+    .level-track-title { font-size: 14px; font-weight: 600; opacity: 0.9; margin-bottom: 20px; }
+    .level-nodes { display: flex; gap: 8px; align-items: center; }
+    .level-node { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .level-dot { width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
+    .level-dot.completed { background: var(--primary); }
+    .level-dot.current { background: white; color: var(--secondary); box-shadow: 0 0 0 4px rgba(255,255,255,0.3); }
+    .level-label { font-size: 10px; opacity: 0.7; text-align: center; max-width: 80px; }
+    .level-label.current { opacity: 1; font-weight: 600; }
+    .level-connector { flex: 0.3; height: 3px; background: rgba(255,255,255,0.2); margin-bottom: 24px; }
+    .level-connector.completed { background: var(--primary); }
+    .main { max-width: 1400px; margin: 0 auto; padding: 32px; }
+    .skills-container { display: flex; flex-direction: column; gap: 24px; }
+    .skill-row { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+    .skill-header { padding: 20px 24px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid var(--border); cursor: pointer; }
+    .skill-header:hover { background: var(--bg); }
+    .skill-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .skill-icon.strategy { background: #DBEAFE; }
+    .skill-icon.orgdesign { background: #FEE2E2; }
+    .skill-icon.talent { background: #D1FAE5; }
+    .skill-icon.employee { background: #FCE7F3; }
+    .skill-icon.policy { background: #FEF3C7; }
+    .skill-icon.data { background: #E0E7FF; }
+    .skill-icon.stakeholder { background: #F3E8FF; }
+    .skill-info { flex: 1; }
+    .skill-info h3 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+    .skill-info p { font-size: 13px; color: var(--text-light); }
+    .skill-progress { display: flex; align-items: center; gap: 12px; }
+    .progress-bar { width: 120px; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--primary); border-radius: 3px; }
+    .progress-text { font-size: 12px; font-weight: 600; color: var(--text-light); min-width: 36px; }
+    .expand-icon { font-size: 18px; color: var(--text-light); transition: transform 0.2s; }
+    .skill-row.expanded .expand-icon { transform: rotate(180deg); }
+    .skill-levels { display: none; padding: 0 24px 24px; }
+    .skill-row.expanded .skill-levels { display: block; }
+    .levels-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .level-column { border: 2px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .level-column.completed { border-color: var(--success); background: linear-gradient(to bottom, var(--success-light), white); }
+    .level-column.current { border-color: var(--primary); box-shadow: 0 4px 12px rgba(0, 168, 157, 0.15); }
+    .level-column.locked { opacity: 0.5; }
+    .level-column-header { padding: 12px 14px; background: var(--bg); border-bottom: 1px solid var(--border); }
+    .level-column.completed .level-column-header { background: var(--success-light); }
+    .level-column.current .level-column-header { background: var(--success-light); }
+    .level-column-title { font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+    .level-column-title .badge { font-size: 9px; padding: 2px 6px; border-radius: 100px; background: var(--primary); color: white; }
+    .level-column-title .badge.completed { background: var(--success); }
+    .level-column-title .badge.locked { background: var(--text-light); }
+    .level-column-subtitle { font-size: 10px; color: var(--text-light); margin-top: 2px; }
+    .level-column-body { padding: 14px; }
+    .behaviour-item { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .behaviour-item:last-child { border-bottom: none; }
+    .behaviour-checkbox { width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 5px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; transition: all 0.2s; font-size: 11px; }
+    .behaviour-checkbox:hover:not(.disabled) { border-color: var(--primary); }
+    .behaviour-checkbox.checked { background: var(--primary); border-color: var(--primary); color: white; }
+    .behaviour-checkbox.auto-checked { background: var(--success); border-color: var(--success); color: white; cursor: default; }
+    .behaviour-checkbox.disabled { cursor: not-allowed; opacity: 0.4; }
+    .behaviour-content { flex: 1; }
+    .behaviour-text { font-size: 12px; line-height: 1.5; }
+    .behaviour-text.disabled { opacity: 0.5; }
+    .footer { background: var(--secondary); color: white; padding: 24px; text-align: center; margin-top: 48px; }
+    .footer-text { font-size: 13px; opacity: 0.7; }
+    .promotion-toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%); background: var(--secondary); color: white; padding: 16px 32px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 1000; display: none; animation: slideUp 0.3s ease; }
+    .promotion-toast.show { display: block; }
+    @keyframes slideUp { from { transform: translateX(-50%) translateY(20px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
+    .promotion-toast h3 { font-size: 18px; margin-bottom: 4px; }
+    .promotion-toast p { font-size: 14px; opacity: 0.9; }
+    @media (max-width: 1200px) { .levels-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px) { 
+      .levels-grid { grid-template-columns: 1fr; }
+      .profile-top { flex-direction: column; text-align: center; }
+      .profile-meta { justify-content: center; }
+      .main { padding: 20px; }
+      .level-nodes { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="login-logo-icon">S</div>
+        <span class="login-logo-text">Simple Progression</span>
+      </div>
+      <p class="login-subtitle">Sign in to view your career progression framework</p>
+      <div class="error-msg" id="errorMsg">Invalid credentials. Please try again.</div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="emailInput" placeholder="you@simpleonlinehealthcare.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="passwordInput" placeholder="Enter your password">
+      </div>
+      <button class="login-btn" onclick="handleLogin()">Sign In</button>
+    </div>
+  </div>
+  <div class="app" id="app">
+    <header class="header">
+      <div class="header-inner">
+        <div class="logo"><div class="logo-icon">S</div><span>Simple Progression</span></div>
+        <div class="header-right">
+          <button class="export-btn" onclick="exportAssessment()"><span>📥</span> Export</button>
+          <div class="user-pill">
+            <div class="user-avatar" id="userAvatar">AC</div>
+            <span class="user-name" id="userName">Alan Creevy</span>
+          </div>
+          <button class="logout-btn" onclick="handleLogout()">Sign out</button>
+        </div>
+      </div>
+    </header>
+    <section class="profile-section">
+      <div class="profile-inner">
+        <div class="profile-top">
+          <div class="profile-avatar" id="profileAvatar">AC</div>
+          <div class="profile-info">
+            <h1 id="profileName">Alan Creevy</h1>
+            <div class="profile-title" id="profileTitle">HR Business Partner</div>
+            <div class="profile-meta">
+              <div class="profile-badge" id="profileTrack">👥 HR Business Partner</div>
+              <div class="profile-badge current" id="profileProgress">✅ 0% Complete</div>
+            </div>
+          </div>
+        </div>
+        <div class="level-track">
+          <div class="level-track-title">Your career progression</div>
+          <div class="level-nodes" id="levelNodes"></div>
+        </div>
+      </div>
+    </section>
+    <main class="main">
+      <div class="skills-container" id="skillsContainer"></div>
+    </main>
+    <footer class="footer"><p class="footer-text">© Simple Online Healthcare 2026</p></footer>
+  </div>
+  <div class="promotion-toast" id="promotionToast">
+    <h3>🎉 Congratulations!</h3>
+    <p id="promotionText">You've been promoted!</p>
+  </div>
+
+<script>
+// ========== DATA ==========
+const users = {
+  'alan@simpleonlinehealthcare.com': { password: 'alan123', name: 'Alan Creevy', level: 2 },
+  'sarah@simpleonlinehealthcare.com': { password: 'sarah123', name: 'Sarah Mitchell', level: 1 },
+  'james@simpleonlinehealthcare.com': { password: 'james123', name: 'James Wilson', level: 3 },
+  'emma@simpleonlinehealthcare.com': { password: 'emma123', name: 'Emma Thompson', level: 4 }
+};
+
+const levels = [
+  { id: 1, title: 'Associate HRBP', short: 'Associate' },
+  { id: 2, title: 'HR Business Partner', short: 'HRBP' },
+  { id: 3, title: 'Senior HR Business Partner', short: 'Senior HRBP' },
+  { id: 4, title: 'Lead HR Business Partner', short: 'Lead HRBP' },
+  { id: 5, title: 'Principal HR Business Partner', short: 'Principal' }
+];
+
+const skills = [
+  { id: 'strategy', name: 'Strategic HR Partnership', icon: '🎯', iconClass: 'strategy', desc: 'People strategy & business partnership' },
+  { id: 'orgdesign', name: 'Organization Design & Change', icon: '🔄', iconClass: 'orgdesign', desc: 'Restructuring, transformation & change management' },
+  { id: 'talent', name: 'Talent, Performance & Development', icon: '⭐', iconClass: 'talent', desc: 'Talent processes, succession & capability building' },
+  { id: 'employee', name: 'Employee Relations, Coaching & Wellbeing', icon: '💚', iconClass: 'employee', desc: 'ER cases, manager coaching & employee support' },
+  { id: 'policy', name: 'HR Policy, Risk & Compliance', icon: '📋', iconClass: 'policy', desc: 'Policy application, legal compliance & risk management' },
+  { id: 'data', name: 'People Data, Workforce Planning & HR Tech', icon: '📊', iconClass: 'data', desc: 'Analytics, workforce planning & technology' },
+  { id: 'stakeholder', name: 'Stakeholder Management & Influence', icon: '🤝', iconClass: 'stakeholder', desc: 'Building relationships & influencing decisions' }
+];
+
+// Behaviours from Matricsy HR Business Partner framework
+const behaviours = {
+  strategy: {
+    1: [
+      'Support delivery of people plans for a business area under guidance, using agreed priorities and timelines',
+      'Connect basic people topics such as hiring, performance, absence, and development to team needs',
+      'Prepare accurate inputs for business reviews, workforce updates, and HR action tracking'
+    ],
+    2: [
+      'Independently partner with line managers on people priorities aligned to business goals',
+      'Identify recurring workforce issues and recommend practical interventions across hiring, capability, engagement, or retention',
+      'Translate annual business objectives into a clear people plan for supported functions',
+      'Balance employee experience, manager needs, and business constraints in day-to-day decisions'
+    ],
+    3: [
+      'Shape people strategy for a department or business unit using business performance, capability gaps, and organisation needs',
+      'Advise leaders on trade-offs across structure, talent, culture, cost, and risk',
+      'Influence medium-term workforce and capability priorities beyond immediate operational issues',
+      'Ensure people initiatives are sequenced realistically and tied to measurable business outcomes'
+    ],
+    4: [
+      'Define strategic people priorities across multiple functions or a major business area',
+      'Guide senior leaders through complex business changes with integrated people, organisation, and culture responses',
+      'Set standards for how HR business partnering operates, including planning cadence, stakeholder engagement, and impact tracking',
+      'Challenge leadership assumptions with evidence and sound organizational judgment'
+    ],
+    5: [
+      'Shape enterprise-level people strategy linked to business model, growth plans, and organisational capability',
+      'Influence executive decision making on long-range workforce, organisation, and leadership priorities',
+      'Define the strategic operating model for HR business partnering across the organisation',
+      'Establish success measures for people strategy and ensure sustained organizational impact'
+    ]
+  },
+  orgdesign: {
+    1: [
+      'Support simple team changes by documenting role impacts, reporting lines, and communication needs',
+      'Help coordinate change actions such as manager briefings, FAQs, and employee updates under guidance',
+      'Recognize when change activity may affect morale, role clarity, or policy compliance and escalate appropriately'
+    ],
+    2: [
+      'Independently support local restructures, team redesigns, or role clarification exercises',
+      'Assess likely people impacts of change and help managers plan communication, transition, and support actions',
+      'Use basic organization design principles such as span of control, role clarity, and decision alignment in recommendations',
+      'Track change adoption issues and adjust plans with managers as needed'
+    ],
+    3: [
+      'Lead organization design work for a business unit, including current-state assessment and future-state options',
+      'Facilitate change plans that address stakeholder alignment, capability needs, role impacts, and resistance risks',
+      'Evaluate structural options against business outcomes, employee impact, and implementation complexity',
+      'Coach leaders on visible sponsorship and consistent change communication'
+    ],
+    4: [
+      'Lead complex redesign or transformation programs spanning multiple teams, geographies, or leadership layers',
+      'Define organization design principles and change governance for major initiatives',
+      'Integrate workforce planning, culture, process, and leadership implications into transformation decisions',
+      'Review change outcomes and improve organization design and transition practices across the HR function'
+    ],
+    5: [
+      'Shape enterprise organization design strategy in response to growth, restructuring, operating model shifts, or mergers',
+      'Set organization design standards, decision rights, and governance expectations across the company',
+      'Advise executive leaders on complex transformation trade-offs involving structure, culture, talent, and risk',
+      'Build organizational capability for leading large-scale change sustainably'
+    ]
+  },
+  talent: {
+    1: [
+      'Support core talent processes such as goal cycles, review administration, succession inputs, and learning coordination',
+      'Use agreed frameworks to help managers document development actions and follow-up plans',
+      'Identify when employees may need additional support, feedback, or development pathways and flag appropriately'
+    ],
+    2: [
+      'Independently support managers on performance conversations, development planning, and internal mobility decisions',
+      'Use performance and potential data to identify talent risks and practical interventions',
+      'Contribute to succession and capability discussions with clear evidence and balanced judgment',
+      'Promote fair and consistent application of performance and development processes'
+    ],
+    3: [
+      'Design or tailor talent and development approaches for a business unit based on capability needs and workforce trends',
+      'Advise leaders on succession depth, critical roles, retention of key talent, and capability building priorities',
+      'Improve quality of calibration and talent reviews through sound challenge and facilitation',
+      'Measure the impact of development and talent actions on readiness, performance, or retention'
+    ],
+    4: [
+      'Lead cross-functional talent and development strategies for leadership pipelines, critical skills, and workforce capability',
+      'Set expectations for robust talent review, succession planning, and development governance',
+      'Align performance and development practices to business transformation, culture, and future capability needs',
+      'Sponsor improvements to enterprise talent processes where current approaches limit business impact'
+    ],
+    5: [
+      'Define enterprise talent philosophy and strategic workforce capability priorities',
+      'Shape executive succession, leadership development, and critical capability investment decisions',
+      'Establish organization-wide standards for performance, potential, and development practices',
+      'Ensure talent strategy creates measurable long-term capability and leadership strength'
+    ]
+  },
+  employee: {
+    1: [
+      'Handle straightforward employee queries accurately and escalate sensitive cases in a timely way',
+      'Support case documentation with clear records, factual notes, and policy references',
+      'Coach managers on basic people process steps using approved guidance'
+    ],
+    2: [
+      'Independently manage routine employee relations cases such as attendance, conduct, capability, or grievances within policy',
+      'Coach managers to handle conversations fairly, respectfully, and with appropriate documentation',
+      'Identify wellbeing, inclusion, or team climate concerns and recommend practical support actions',
+      'Balance empathy, consistency, legal awareness, and business needs in case handling'
+    ],
+    3: [
+      'Lead complex or high-risk employee relations matters, including cases involving multiple stakeholders or significant business impact',
+      'Guide managers on early intervention, conflict resolution, and durable people solutions rather than process-only responses',
+      'Use case patterns to identify systemic leadership, policy, or culture issues',
+      'Support psychologically safe and inclusive management practices across the business area'
+    ],
+    4: [
+      'Set approach and quality standards for sensitive employee relations and manager coaching across a major area',
+      'Advise senior leaders on high-profile people risks, reputational concerns, and cultural implications',
+      'Use employee relations trends to drive preventive interventions in leadership behavior, manager capability, or policy clarity',
+      'Build consistency in wellbeing and employee experience practices across teams or functions'
+    ],
+    5: [
+      'Shape enterprise approach to employee relations, leadership conduct, and workforce wellbeing in line with risk appetite and culture',
+      'Provide executive-level judgment on the most sensitive people matters and their organizational implications',
+      'Establish preventive frameworks that reduce repeated employee relations issues through stronger management practice and culture design',
+      'Ensure employee relations strategy supports trust, fairness, and long-term organizational health'
+    ]
+  },
+  policy: {
+    1: [
+      'Apply established policies and procedures accurately in routine situations',
+      'Maintain proper documentation and record-keeping for compliance purposes',
+      'Recognize situations requiring escalation to senior HR or legal colleagues'
+    ],
+    2: [
+      'Interpret and apply policies flexibly while maintaining consistent standards',
+      'Identify policy gaps or inconsistencies and recommend practical improvements',
+      'Support managers in understanding compliance requirements and their obligations',
+      'Balance policy adherence with practical business needs appropriately'
+    ],
+    3: [
+      'Develop or refine policies for a business unit considering legal, cultural, and operational factors',
+      'Lead compliance reviews and audits, addressing findings systematically',
+      'Advise on complex policy interpretation where precedent or guidance is unclear',
+      'Build manager capability in policy application through coaching and clear guidance'
+    ],
+    4: [
+      'Lead policy development and governance across multiple business areas',
+      'Advise senior leaders on regulatory changes and their organizational implications',
+      'Establish policy review cycles and governance standards for the HR function',
+      'Integrate policy considerations into broader organizational change initiatives'
+    ],
+    5: [
+      'Shape enterprise policy strategy aligned with business model, risk appetite, and organizational values',
+      'Lead the organization response to significant regulatory or compliance changes',
+      'Establish governance frameworks that balance compliance with organizational agility',
+      'Ensure policy approach supports trust, fairness, and sustainable organizational health'
+    ]
+  },
+  data: {
+    1: [
+      'Produce accurate reports using HR systems and standard templates',
+      'Maintain data quality through careful input and regular validation',
+      'Support basic workforce planning activities with reliable data'
+    ],
+    2: [
+      'Analyze people data to identify trends, risks, and opportunities for action',
+      'Contribute to workforce planning discussions with evidence-based insights',
+      'Use HR technology effectively to improve process efficiency',
+      'Present data clearly to support manager decision-making'
+    ],
+    3: [
+      'Lead data analysis projects that inform strategic people decisions',
+      'Develop workforce planning approaches for a business unit considering multiple scenarios',
+      'Identify opportunities to improve HR technology adoption and effectiveness',
+      'Build manager capability in using people data for decision-making'
+    ],
+    4: [
+      'Define analytics and workforce planning standards across multiple business areas',
+      'Lead HR technology initiatives that improve capability and efficiency',
+      'Advise senior leaders on workforce trends and their strategic implications',
+      'Integrate people data into broader business planning and decision processes'
+    ],
+    5: [
+      'Shape enterprise people analytics and workforce planning strategy',
+      'Define HR technology roadmap aligned with organizational capability needs',
+      'Establish standards for data governance and analytics across the organization',
+      'Ensure people data strategy creates measurable business value and insight'
+    ]
+  },
+  stakeholder: {
+    1: [
+      'Build positive working relationships with managers and HR colleagues',
+      'Communicate HR information clearly and respond helpfully to queries',
+      'Adapt communication style appropriately for different audiences'
+    ],
+    2: [
+      'Influence manager decisions through credible advice and practical support',
+      'Build trusted relationships across the business area you support',
+      'Navigate disagreements constructively while maintaining relationships',
+      'Present HR perspectives effectively in business discussions'
+    ],
+    3: [
+      'Influence senior stakeholders on people priorities and organizational decisions',
+      'Build coalitions across functions to advance people initiatives',
+      'Navigate complex stakeholder dynamics and competing priorities',
+      'Represent HR credibly in leadership forums and business planning'
+    ],
+    4: [
+      'Shape senior leadership thinking on people, organization, and culture matters',
+      'Build strategic partnerships across the organization to advance people priorities',
+      'Influence organizational decisions at executive level through evidence and judgment',
+      'Model effective stakeholder engagement for the HR function'
+    ],
+    5: [
+      'Influence executive and board-level decisions on strategic people matters',
+      'Build external relationships that enhance organizational capability and reputation',
+      'Shape how the organization engages with external stakeholders on people topics',
+      'Establish standards for stakeholder engagement across the HR function'
+    ]
+  }
+};
+
+// ========== STATE ==========
+let currentUser = null;
+let checkedBehaviours = {};
+
+// ========== FUNCTIONS ==========
+function handleLogin() {
+  const email = document.getElementById('emailInput').value.toLowerCase().trim();
+  const password = document.getElementById('passwordInput').value;
+  const user = users[email];
+  
+  if (user && user.password === password) {
+    currentUser = { email, ...user };
+    const saved = localStorage.getItem(`hrbp_progress_${email}`);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      checkedBehaviours = parsed.checked || {};
+      if (parsed.level) currentUser.level = parsed.level;
+    } else {
+      checkedBehaviours = {};
+    }
+    showApp();
+  } else {
+    document.getElementById('errorMsg').style.display = 'block';
+  }
+}
+
+function handleLogout() {
+  currentUser = null;
+  checkedBehaviours = {};
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('app').classList.remove('active');
+  document.getElementById('emailInput').value = '';
+  document.getElementById('passwordInput').value = '';
+  document.getElementById('errorMsg').style.display = 'none';
+}
+
+function showApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('app').classList.add('active');
+  renderProfile();
+  renderLevelNodes();
+  renderSkills();
+}
+
+function getInitials(name) {
+  return name.split(' ').map(n => n[0]).join('').toUpperCase();
+}
+
+function getCurrentTitle() {
+  return levels[currentUser.level - 1].title;
+}
+
+function renderProfile() {
+  const initials = getInitials(currentUser.name);
+  
+  document.getElementById('userAvatar').textContent = initials;
+  document.getElementById('userName').textContent = currentUser.name;
+  document.getElementById('profileAvatar').textContent = initials;
+  document.getElementById('profileName').textContent = currentUser.name;
+  document.getElementById('profileTitle').textContent = getCurrentTitle();
+  document.getElementById('profileTrack').textContent = `👥 ${getCurrentTitle()}`;
+  
+  const progress = calculateCurrentProgress();
+  document.getElementById('profileProgress').textContent = `✅ ${progress}% Complete`;
+}
+
+function calculateCurrentProgress() {
+  let total = 0;
+  let checked = 0;
+  const level = currentUser.level;
+  
+  skills.forEach(skill => {
+    const behavs = behaviours[skill.id][level] || [];
+    behavs.forEach((_, idx) => {
+      total++;
+      const key = `${skill.id}-${level}-${idx}`;
+      if (checkedBehaviours[key]) checked++;
+    });
+  });
+  
+  return total > 0 ? Math.round((checked / total) * 100) : 0;
+}
+
+function renderLevelNodes() {
+  const container = document.getElementById('levelNodes');
+  container.innerHTML = '';
+  
+  levels.forEach((lvl, idx) => {
+    if (idx > 0) {
+      const connector = document.createElement('div');
+      connector.className = 'level-connector' + (idx < currentUser.level ? ' completed' : '');
+      container.appendChild(connector);
+    }
+    
+    const node = document.createElement('div');
+    node.className = 'level-node';
+    
+    let dotClass = 'level-dot';
+    if (idx + 1 < currentUser.level) dotClass += ' completed';
+    else if (idx + 1 === currentUser.level) dotClass += ' current';
+    
+    let labelClass = 'level-label';
+    if (idx + 1 === currentUser.level) labelClass += ' current';
+    
+    node.innerHTML = `
+      <div class="${dotClass}">${idx + 1}</div>
+      <div class="${labelClass}">${lvl.short}</div>
+    `;
+    container.appendChild(node);
+  });
+}
+
+function renderSkills() {
+  const container = document.getElementById('skillsContainer');
+  container.innerHTML = '';
+  
+  skills.forEach(skill => {
+    const row = document.createElement('div');
+    row.className = 'skill-row';
+    row.id = `skill-${skill.id}`;
+    
+    const progress = calculateSkillProgress(skill.id);
+    
+    row.innerHTML = `
+      <div class="skill-header" onclick="toggleSkill('${skill.id}')">
+        <div class="skill-icon ${skill.iconClass}">${skill.icon}</div>
+        <div class="skill-info">
+          <h3>${skill.name}</h3>
+          <p>${skill.desc}</p>
+        </div>
+        <div class="skill-progress">
+          <div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div>
+          <span class="progress-text">${progress}%</span>
+        </div>
+        <div class="expand-icon">▼</div>
+      </div>
+      <div class="skill-levels">
+        ${renderSkillLevels(skill)}
+      </div>
+    `;
+    
+    container.appendChild(row);
+  });
+}
+
+function calculateSkillProgress(skillId) {
+  let total = 0;
+  let checked = 0;
+  const level = currentUser.level;
+  
+  const behavs = behaviours[skillId][level] || [];
+  behavs.forEach((_, idx) => {
+    total++;
+    const key = `${skillId}-${level}-${idx}`;
+    if (checkedBehaviours[key]) checked++;
+  });
+  
+  return total > 0 ? Math.round((checked / total) * 100) : 0;
+}
+
+function renderSkillLevels(skill) {
+  const currentLevel = currentUser.level;
+  
+  let html = '<div class="levels-grid">';
+  
+  levels.forEach((lvl, lvlIdx) => {
+    const levelNum = lvlIdx + 1;
+    const behavs = behaviours[skill.id][levelNum] || [];
+    
+    let columnClass = 'level-column';
+    let badge = '';
+    let badgeClass = '';
+    
+    if (levelNum < currentLevel) {
+      columnClass += ' completed';
+      badge = 'Completed';
+      badgeClass = 'completed';
+    } else if (levelNum === currentLevel) {
+      columnClass += ' current';
+      badge = 'Current';
+      badgeClass = '';
+    } else {
+      columnClass += ' locked';
+      badge = 'Locked';
+      badgeClass = 'locked';
+    }
+    
+    html += `
+      <div class="${columnClass}">
+        <div class="level-column-header">
+          <div class="level-column-title">
+            Level ${levelNum}
+            <span class="badge ${badgeClass}">${badge}</span>
+          </div>
+          <div class="level-column-subtitle">${lvl.short}</div>
+        </div>
+        <div class="level-column-body">
+    `;
+    
+    behavs.forEach((behav, idx) => {
+      const key = `${skill.id}-${levelNum}-${idx}`;
+      
+      let checkboxClass = 'behaviour-checkbox';
+      let isDisabled = false;
+      let isChecked = false;
+      let textClass = 'behaviour-text';
+      
+      if (levelNum < currentLevel) {
+        checkboxClass += ' auto-checked';
+        isChecked = true;
+        isDisabled = true;
+      } else if (levelNum === currentLevel) {
+        isChecked = checkedBehaviours[key] === true;
+        if (isChecked) checkboxClass += ' checked';
+      } else {
+        checkboxClass += ' disabled';
+        isDisabled = true;
+        textClass += ' disabled';
+      }
+      
+      html += `
+        <div class="behaviour-item" id="item-${key}">
+          <div class="${checkboxClass}" 
+               onclick="${isDisabled ? '' : `toggleBehaviour('${key}')`}"
+               data-key="${key}">
+            ${isChecked ? '✓' : ''}
+          </div>
+          <div class="behaviour-content">
+            <div class="${textClass}">${behav}</div>
+          </div>
+        </div>
+      `;
+    });
+    
+    html += '</div></div>';
+  });
+  
+  html += '</div>';
+  return html;
+}
+
+function toggleSkill(skillId) {
+  const row = document.getElementById(`skill-${skillId}`);
+  row.classList.toggle('expanded');
+}
+
+function toggleBehaviour(key) {
+  checkedBehaviours[key] = !checkedBehaviours[key];
+  saveProgress();
+  
+  const checkbox = document.querySelector(`[data-key="${key}"]`);
+  if (checkbox) {
+    if (checkedBehaviours[key]) {
+      checkbox.classList.add('checked');
+      checkbox.textContent = '✓';
+    } else {
+      checkbox.classList.remove('checked');
+      checkbox.textContent = '';
+    }
+  }
+  
+  updateProgressDisplays();
+  checkForPromotion();
+}
+
+function updateProgressDisplays() {
+  const progress = calculateCurrentProgress();
+  document.getElementById('profileProgress').textContent = `✅ ${progress}% Complete`;
+  
+  skills.forEach(skill => {
+    const skillProgress = calculateSkillProgress(skill.id);
+    const row = document.getElementById(`skill-${skill.id}`);
+    if (row) {
+      const fill = row.querySelector('.progress-fill');
+      const text = row.querySelector('.progress-text');
+      if (fill) fill.style.width = `${skillProgress}%`;
+      if (text) text.textContent = `${skillProgress}%`;
+    }
+  });
+}
+
+function checkForPromotion() {
+  const progress = calculateCurrentProgress();
+  
+  if (progress === 100 && currentUser.level < 5) {
+    currentUser.level++;
+    saveProgress();
+    showPromotionToast();
+    renderProfile();
+    renderLevelNodes();
+    renderSkills();
+  }
+}
+
+function showPromotionToast() {
+  const toast = document.getElementById('promotionToast');
+  const text = document.getElementById('promotionText');
+  text.textContent = `You've been promoted to ${getCurrentTitle()}!`;
+  toast.classList.add('show');
+  
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 4000);
+}
+
+function saveProgress() {
+  if (!currentUser) return;
+  
+  const data = {
+    checked: checkedBehaviours,
+    level: currentUser.level
+  };
+  
+  localStorage.setItem(`hrbp_progress_${currentUser.email}`, JSON.stringify(data));
+}
+
+function exportAssessment() {
+  let content = `SIMPLE ONLINE HEALTHCARE - HR BUSINESS PARTNER PROGRESSION\n`;
+  content += `${'='.repeat(60)}\n\n`;
+  content += `Name: ${currentUser.name}\n`;
+  content += `Current Level: ${getCurrentTitle()}\n`;
+  content += `Overall Progress: ${calculateCurrentProgress()}%\n`;
+  content += `Export Date: ${new Date().toLocaleDateString()}\n\n`;
+  content += `${'='.repeat(60)}\n\n`;
+  
+  skills.forEach(skill => {
+    const progress = calculateSkillProgress(skill.id);
+    content += `${skill.name} (${progress}% complete)\n`;
+    content += `${'-'.repeat(40)}\n`;
+    
+    const level = currentUser.level;
+    const behavs = behaviours[skill.id][level] || [];
+    
+    behavs.forEach((behav, idx) => {
+      const key = `${skill.id}-${level}-${idx}`;
+      const checked = checkedBehaviours[key] ? '✓' : '○';
+      content += `  ${checked} ${behav}\n`;
+    });
+    
+    content += '\n';
+  });
+  
+  const blob = new Blob([content], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `hrbp-progression-${currentUser.name.replace(/\s+/g, '-').toLowerCase()}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('passwordInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') handleLogin();
+  });
+  document.getElementById('emailInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') document.getElementById('passwordInput').focus();
+  });
+});
+</script>
+</body>
+</html>
