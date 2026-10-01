@@ -22,7 +22,6 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
     
-    /* Login */
     .login-screen { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%); padding: 20px; }
     .login-card { background: white; padding: 48px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); width: 100%; max-width: 420px; }
     .login-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
@@ -37,11 +36,9 @@
     .login-btn:hover { background: var(--primary-dark); }
     .error-msg { background: #fef2f2; color: #dc2626; padding: 12px 16px; border-radius: 10px; margin-bottom: 20px; font-size: 14px; display: none; }
     
-    /* App */
     .app { display: none; min-height: 100vh; }
     .app.active { display: block; }
     
-    /* Header */
     .header { background: white; border-bottom: 1px solid var(--border); padding: 0 32px; position: sticky; top: 0; z-index: 100; }
     .header-inner { max-width: 1400px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
     .logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; color: var(--secondary); }
@@ -57,7 +54,6 @@
     .user-name { font-weight: 600; font-size: 13px; }
     .logout-btn { background: none; border: none; color: var(--text-light); font-size: 13px; cursor: pointer; }
     
-    /* Profile Section */
     .profile-section { background: linear-gradient(135deg, var(--secondary) 0%, #2D4A6F 100%); color: white; padding: 48px 32px; }
     .profile-inner { max-width: 1400px; margin: 0 auto; }
     .profile-top { display: flex; align-items: center; gap: 32px; margin-bottom: 32px; }
@@ -68,7 +64,6 @@
     .profile-badge { display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 100px; font-size: 14px; }
     .profile-badge.highlight { background: var(--primary); }
     
-    /* Level Track */
     .level-track { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; margin-bottom: 24px; }
     .level-track-title { font-size: 14px; font-weight: 600; opacity: 0.9; margin-bottom: 20px; }
     .level-nodes { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
@@ -81,7 +76,6 @@
     .level-connector { width: 20px; height: 3px; background: rgba(255,255,255,0.2); margin-bottom: 20px; }
     .level-connector.completed { background: var(--primary); }
     
-    /* Sub-level Track */
     .sublevel-track { background: rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; }
     .sublevel-track-title { font-size: 14px; font-weight: 600; opacity: 0.9; margin-bottom: 16px; }
     .sublevel-nodes { display: flex; gap: 8px; align-items: center; }
@@ -97,10 +91,8 @@
     .sublevel-desc-title { font-size: 12px; opacity: 0.7; margin-bottom: 4px; }
     .sublevel-desc-text { font-size: 14px; line-height: 1.5; }
     
-    /* Main */
     .main { max-width: 1400px; margin: 0 auto; padding: 32px; }
     
-    /* Team View */
     .team-section { margin-bottom: 32px; }
     .team-title { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
     .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
@@ -115,7 +107,6 @@
     .team-card-badge { font-size: 11px; padding: 4px 10px; background: var(--bg); border-radius: 100px; color: var(--text-light); }
     .team-card-badge.level { background: var(--success-light); color: var(--success); }
     
-    /* Skills */
     .skills-container { display: flex; flex-direction: column; gap: 24px; }
     .skill-row { background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .skill-header { padding: 20px 24px; display: flex; align-items: center; gap: 16px; border-bottom: 1px solid var(--border); cursor: pointer; }
@@ -138,7 +129,6 @@
     .skill-levels { display: none; padding: 0 24px 24px; }
     .skill-row.expanded .skill-levels { display: block; }
     
-    /* Level Columns */
     .levels-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
     .level-column { border: 2px solid var(--border); border-radius: 12px; overflow: hidden; }
     .level-column.completed { border-color: var(--success); background: linear-gradient(to bottom, var(--success-light), white); }
@@ -164,29 +154,24 @@
     .behaviour-text { font-size: 11px; line-height: 1.4; }
     .behaviour-text.disabled { opacity: 0.5; }
     
-    /* Read-only notice */
     .readonly-notice { background: #FEF3C7; border: 1px solid #F59E0B; border-radius: 12px; padding: 16px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; }
     .readonly-notice-icon { font-size: 24px; }
     .readonly-notice-text { font-size: 14px; color: #92400E; }
     .readonly-notice-text strong { font-weight: 600; }
     
-    /* Sync indicator */
     .sync-indicator { position: fixed; top: 80px; right: 20px; background: white; padding: 8px 16px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-size: 12px; display: none; z-index: 200; }
     .sync-indicator.syncing { display: flex; align-items: center; gap: 8px; color: var(--primary); }
     .sync-indicator.error { display: flex; background: #fef2f2; color: #dc2626; }
     
-    /* Footer */
     .footer { background: var(--secondary); color: white; padding: 24px; text-align: center; margin-top: 48px; }
     .footer-text { font-size: 13px; opacity: 0.7; }
     
-    /* Toast */
     .promotion-toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%); background: var(--secondary); color: white; padding: 16px 32px; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 1000; display: none; animation: slideUp 0.3s ease; }
     .promotion-toast.show { display: block; }
     @keyframes slideUp { from { transform: translateX(-50%) translateY(20px); opacity: 0; } to { transform: translateX(-50%) translateY(0); opacity: 1; } }
     .promotion-toast h3 { font-size: 18px; margin-bottom: 4px; }
     .promotion-toast p { font-size: 14px; opacity: 0.9; }
     
-    /* Responsive */
     @media (max-width: 1200px) { .levels-grid { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 768px) { 
       .levels-grid { grid-template-columns: repeat(2, 1fr); }
@@ -198,9 +183,7 @@
       .header-inner { flex-wrap: wrap; height: auto; padding: 12px 0; gap: 12px; }
       .view-toggle { order: 3; width: 100%; justify-content: center; }
     }
-    @media (max-width: 500px) { 
-      .levels-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 500px) { .levels-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -244,9 +227,7 @@
       </div>
     </header>
     
-    <div class="sync-indicator" id="syncIndicator">
-      <span>⏳</span> Syncing...
-    </div>
+    <div class="sync-indicator" id="syncIndicator"><span>⏳</span> Syncing...</div>
     
     <div id="myProgressionView">
       <section class="profile-section">
@@ -264,12 +245,10 @@
               </div>
             </div>
           </div>
-          
           <div class="level-track">
             <div class="level-track-title">Career Levels</div>
             <div class="level-nodes" id="levelNodes"></div>
           </div>
-          
           <div class="sublevel-track" id="sublevelTrack">
             <div class="sublevel-track-title">Your progression within <span id="currentLevelName">this level</span></div>
             <div class="sublevel-nodes" id="sublevelNodes"></div>
@@ -280,13 +259,10 @@
           </div>
         </div>
       </section>
-      
       <main class="main">
         <div class="readonly-notice" id="readonlyNotice" style="display: none;">
           <div class="readonly-notice-icon">👁️</div>
-          <div class="readonly-notice-text">
-            <strong>View Only</strong> — Your progression is managed by your manager. Contact them to discuss your development.
-          </div>
+          <div class="readonly-notice-text"><strong>View Only</strong> — Your progression is managed by your manager.</div>
         </div>
         <div class="skills-container" id="skillsContainer"></div>
       </main>
@@ -299,13 +275,11 @@
           <p style="opacity: 0.9;">Select a team member to view and update their progression</p>
         </div>
       </section>
-      
       <main class="main">
         <div class="team-section">
           <div class="team-title" id="teamTitle">Direct Reports</div>
           <div class="team-grid" id="teamGrid"></div>
         </div>
-        
         <div id="selectedMemberSection" style="display: none;">
           <div class="team-title" id="selectedMemberName" style="margin-bottom: 8px;">Selected Member</div>
           <p style="color: var(--text-light); margin-bottom: 24px;" id="selectedMemberInfo">Info</p>
@@ -324,56 +298,35 @@
 
 <script src="employees.js"></script>
 <script>
-// ========== GOOGLE SHEETS API ==========
 const SHEETS_API = 'https://script.google.com/macros/s/AKfycbwu75LCpoUelojlqfo-6X41V6qdvJGG7TVpdyo7xtRzEbu9_srbaj93cdssPdRuqBm2Mw/exec';
 
 async function loadProgressFromSheets(email) {
   try {
-    const response = await fetch(`${SHEETS_API}?action=get&email=${encodeURIComponent(email)}`);
+    const response = await fetch(SHEETS_API + '?action=get&email=' + encodeURIComponent(email));
     const data = await response.json();
-    if (data.success && data.progress) {
-      return JSON.parse(data.progress || '{}');
-    }
-  } catch (e) {
-    console.error('Failed to load from sheets:', e);
-  }
+    if (data.success && data.progress) return JSON.parse(data.progress || '{}');
+  } catch (e) { console.error('Failed to load:', e); }
   return {};
 }
 
 async function saveProgressToSheets(email, progress, updatedBy) {
   showSyncIndicator(true);
   try {
-    const params = new URLSearchParams({
-      action: 'save',
-      email: email,
-      progress: JSON.stringify(progress),
-      updatedBy: updatedBy
-    });
-    const response = await fetch(`${SHEETS_API}?${params.toString()}`);
+    const params = new URLSearchParams({ action: 'save', email, progress: JSON.stringify(progress), updatedBy });
+    const response = await fetch(SHEETS_API + '?' + params.toString());
     const data = await response.json();
     showSyncIndicator(false);
     return data.success;
-  } catch (e) {
-    console.error('Failed to save to sheets:', e);
-    showSyncIndicator(false, true);
-    return false;
-  }
+  } catch (e) { showSyncIndicator(false, true); return false; }
 }
 
-function showSyncIndicator(show, error = false) {
+function showSyncIndicator(show, error) {
   const indicator = document.getElementById('syncIndicator');
   indicator.className = 'sync-indicator';
-  if (show) {
-    indicator.classList.add('syncing');
-    indicator.innerHTML = '<span>⏳</span> Syncing...';
-  } else if (error) {
-    indicator.classList.add('error');
-    indicator.innerHTML = '<span>⚠️</span> Sync failed';
-    setTimeout(() => indicator.className = 'sync-indicator', 3000);
-  }
+  if (show) { indicator.classList.add('syncing'); indicator.innerHTML = '<span>⏳</span> Syncing...'; }
+  else if (error) { indicator.classList.add('error'); indicator.innerHTML = '<span>⚠️</span> Sync failed'; setTimeout(() => indicator.className = 'sync-indicator', 3000); }
 }
 
-// ========== CONFIGURATION ==========
 const levels = [
   { id: 1, name: 'Contributors', short: 'Contributor', bonus: 5, hasSubs: true },
   { id: 2, name: 'Established Contributors', short: 'Established', bonus: 7, hasSubs: true },
@@ -384,11 +337,11 @@ const levels = [
 ];
 
 const sublevels = [
-  { id: 1, name: 'New to Role', desc: 'Just started at this level. Learning the basics and getting oriented.' },
-  { id: 2, name: 'Developing', desc: 'Building capability. Needs regular guidance and support.' },
+  { id: 1, name: 'New to Role', desc: 'Just started at this level. Learning the basics.' },
+  { id: 2, name: 'Developing', desc: 'Building capability. Needs regular guidance.' },
   { id: 3, name: 'Performing', desc: 'Competent at level. Consistently meets expectations.' },
-  { id: 4, name: 'Established', desc: 'Solid performer. Reliable, independent, and trusted.' },
-  { id: 5, name: 'Exceeding', desc: 'Exceeds expectations. Starting to demonstrate next-level behaviours.' },
+  { id: 4, name: 'Established', desc: 'Solid performer. Reliable and trusted.' },
+  { id: 5, name: 'Exceeding', desc: 'Exceeds expectations. Demonstrating next-level behaviours.' },
   { id: 6, name: 'Ready for Next Level', desc: 'Fully mastered this level. Ready to move up.' }
 ];
 
@@ -402,54 +355,52 @@ const competencies = [
 
 const behaviours = {
   personal: {
-    1: ['Complete assigned tasks accurately and on time', 'Respond positively to feedback and visibly improve next cycle', 'Ask for help early when stuck', 'Use AI assistants with guidance to draft emails, summarise content, or look up how-tos', 'Always review AI output for accuracy before using it'],
-    2: ['Manage complex tasks independently with high accuracy', 'Apply feedback and seek development opportunities', 'Show measurable improvement in accuracy/efficiency within 3 months of feedback', 'Use Langdock to draft, summarise, analyse, and prepare for meetings independently', 'Judge when AI is appropriate vs when to ask a human SME'],
-    3: ['Balance delivery with long-term functional goals', 'Manage workload and resources effectively; prevent delays', 'Initiate ≥1 improvement project per six months aligned to strategy', 'Review AI output for accuracy before using it', 'Flag any AI-generated content involving patient or sensitive data'],
-    4: ['Anticipate strategic, operational, and system-wide challenges', 'Lead ≥2 innovation/improvement projects per six months with measurable value', 'Forward-looking plans prevent delivery risk', 'Use AI to accelerate strategy work - synthesis, modelling, communication', 'Set enterprise-grade expectations for AI quality and ethics'],
-    5: ['Shape functional strategy aligned to wider business objectives', 'Launch ≥2 strategic initiatives per six months with measurable benefit', 'Remove barriers and champion forward-looking priorities', 'Use AI to accelerate strategy work', 'Treat AI output as one input; final calls remain human-led'],
-    6: ['Define, own, and communicate a clear enterprise vision', 'Balance long-term growth, innovation, sustainability with disciplined execution', 'Multi-year strategic priorities consistently delivered', 'Use AI as an enterprise-level strategic capability', 'Own ultimate accountability for AI-driven outcomes']
+    1: ['Complete assigned tasks accurately and on time', 'Respond positively to feedback and visibly improve', 'Ask for help early when stuck', 'Use AI assistants with guidance', 'Always review AI output for accuracy'],
+    2: ['Manage complex tasks independently with high accuracy', 'Apply feedback and seek development opportunities', 'Show measurable improvement within 3 months', 'Use Langdock independently', 'Judge when AI is appropriate vs human SME'],
+    3: ['Balance delivery with long-term functional goals', 'Manage workload and resources effectively', 'Initiate improvement projects aligned to strategy', 'Review AI output for accuracy', 'Flag AI content involving sensitive data'],
+    4: ['Anticipate strategic and system-wide challenges', 'Lead innovation projects with measurable value', 'Forward-looking plans prevent delivery risk', 'Use AI to accelerate strategy work', 'Set enterprise expectations for AI ethics'],
+    5: ['Shape functional strategy aligned to business objectives', 'Launch strategic initiatives with measurable benefit', 'Remove barriers and champion priorities', 'Use AI to accelerate strategy', 'Treat AI as one input; final calls human-led'],
+    6: ['Define and communicate clear enterprise vision', 'Balance growth, innovation with disciplined execution', 'Multi-year priorities consistently delivered', 'Use AI as enterprise strategic capability', 'Own accountability for AI-driven outcomes']
   },
   patient: {
-    1: ['Handle patient/customer data safely and confidentially', 'Explain how your work connects to patient outcomes', 'Zero data handling breaches', 'Never input identifiable patient data into AI tools without approval', 'Escalate anything sensitive rather than relying on AI judgement'],
-    2: ['Resolve requests within SLA with zero compliance breaches', 'Identify recurring issues and escalate within 24 hours', 'Keep patient journey at the forefront of decision making', 'Use AI to triage themes across tickets and identify recurring issues', 'Document AI-assisted decisions clearly so they are auditable'],
-    3: ['Promote a culture of safety, quality, and patient focus', 'Use data and feedback to spot recurring issues; design long-term solutions', 'Maintain strong compliance with no major breaches', 'Use AI to analyse complaints/feedback at scale', 'Ensure AI use complies with clinical, GDPR, and regulatory standards'],
-    4: ['Embed quality, safety, compliance into functional systems', 'Use advanced trend analysis to recommend strategic changes', 'Zero major compliance breaches; year-on-year quality improvement', 'Sponsor AI use cases that measurably improve patient/customer outcomes', 'Hold line for human oversight on regulated decisions'],
-    5: ['Embed patient/customer excellence into all functional strategies', 'Oversee future-focused quality and compliance frameworks', 'Satisfaction/quality scores improve over consecutive cycles', 'Sponsor AI initiatives that measurably move patient/customer metrics', 'Ensure governance keeps pace with AI deployment'],
-    6: ['Champion patient/customer excellence as a non-negotiable enterprise principle', 'Ensure organisation-wide systems protect quality, safety, trust', 'Strong regulatory, ethical, and reputational standing', 'Own enterprise AI risk and ethics at board/exec level', 'Personally engage with regulators and external bodies on AI']
+    1: ['Handle patient data safely and confidentially', 'Explain how your work connects to patient outcomes', 'Zero data handling breaches', 'Never input patient data into AI without approval', 'Escalate sensitive matters'],
+    2: ['Resolve requests within SLA with zero breaches', 'Identify recurring issues and escalate within 24 hours', 'Keep patient journey at forefront', 'Use AI to triage themes', 'Document AI decisions for audit'],
+    3: ['Promote culture of safety and patient focus', 'Use data to spot recurring issues', 'Maintain strong compliance', 'Use AI to analyse feedback at scale', 'Ensure AI complies with GDPR'],
+    4: ['Embed quality and compliance into systems', 'Use trend analysis for strategic changes', 'Zero major breaches; year-on-year improvement', 'Sponsor AI for patient outcomes', 'Hold line for human oversight'],
+    5: ['Embed patient excellence into strategies', 'Oversee quality and compliance frameworks', 'Satisfaction scores improve over cycles', 'Sponsor AI initiatives for metrics', 'Ensure governance keeps pace'],
+    6: ['Champion patient excellence as enterprise principle', 'Ensure systems protect quality and trust', 'Strong regulatory standing', 'Own enterprise AI risk at board level', 'Engage with regulators on AI']
   },
   results: {
-    1: ['Meet daily productivity and quality targets', 'Spot small process issues and flag them to a senior', 'Raise at least one improvement idea per quarter', 'Use AI to summarise your own performance data or spot patterns', 'Bring AI-supported ideas to 1:1s but own the recommendation yourself'],
-    2: ['Consistently meet or exceed individual Goals/OKRs', 'Contribute ≥1 actionable improvement idea per quarter', 'Use AI to analyse own performance data and propose improvements', 'Validate AI insights against the underlying numbers before sharing', 'Bring AI-supported recommendations with a clear human rationale'],
-    3: ['Own delivery of function and team-level KPIs/OKRs', 'Lead initiatives that improve efficiency, accuracy, or service quality', 'Department consistently meets/exceeds KPIs with data-driven reporting', 'Use AI for forecasting, reporting automation, and KPI deep-dives', 'Identify AI use cases that materially improve team output'],
-    4: ['Define and align success measures across teams', 'Drive high-quality execution and remove barriers', 'Embed scalable improvements; measurable uplift in performance', 'Use AI to instrument the function: dashboards, anomaly detection', 'Track ROI of AI investments in the function'],
-    5: ['Own financial performance of the function', 'Drive data-led decision-making', 'Goals and OKRs improve within 12 months of initiatives', 'Use AI to drive financial and operational forecasting', 'Track and report the value AI is creating in your function'],
-    6: ['Own overall organisational performance - financial sustainability, growth, risk', 'Balance short-term performance with long-term value creation', 'Meet/exceed financial, growth, resilience targets over multiple cycles', 'Use AI to inform capital allocation, M&A, scenario modelling', 'Report transparently to the board on AI investment and outcomes']
+    1: ['Meet daily productivity and quality targets', 'Spot process issues and flag to senior', 'Raise improvement ideas per quarter', 'Use AI to summarise performance data', 'Bring AI ideas to 1:1s'],
+    2: ['Consistently meet or exceed Goals/OKRs', 'Contribute actionable improvement ideas', 'Use AI to analyse own data', 'Validate AI insights before sharing', 'Bring AI recommendations with rationale'],
+    3: ['Own delivery of team-level KPIs/OKRs', 'Lead efficiency improvement initiatives', 'Department meets KPIs with data reporting', 'Use AI for forecasting and automation', 'Identify AI use cases for team output'],
+    4: ['Define success measures across teams', 'Drive high-quality execution', 'Embed scalable improvements', 'Use AI for dashboards and anomaly detection', 'Track ROI of AI investments'],
+    5: ['Own financial performance of function', 'Drive data-led decision-making', 'Goals improve within 12 months', 'Use AI for forecasting', 'Track AI value in function'],
+    6: ['Own organisational performance', 'Set enterprise-wide standards', 'Consistent delivery of targets', 'Use AI as performance lever', 'Own AI ROI at enterprise scale']
   },
   scale: {
-    1: ['Work well with peers; communicate progress and blockers clearly', 'Provide shift-end/daily updates without prompting', 'Use AI to draft handover notes or stand-up summaries', 'Edit AI drafts so they reflect what actually happened', 'Share useful prompts with peers when they help the team'],
-    2: ['Collaborate effectively across teams; meet shared deadlines', 'Share expertise with newer colleagues; receive positive peer feedback', 'Build and share reusable prompts that help the team work faster', 'Coach peers on effective AI use within their workflow', 'Flag AI outputs that look wrong or biased to a senior'],
-    3: ['Lead/contribute to cross-functional initiatives', 'Communicate departmental performance, risks, and priorities', 'Improvements adopted by other departments', 'Use AI to draft communications and reports', 'Share useful prompts with peers when they help the team'],
-    4: ['Influence systems and priorities beyond your own function', 'Represent the function in senior forums', '≥2 approved policy/strategy/initiative per year with company-wide impact', 'Use AI to draft communications and strategic documents', 'Share useful prompts with peers when they help the team'],
-    5: ['Influence business-wide decision-making; contribute to corporate strategy', 'Lead cross-functional collaboration, integration, and innovation', 'Active leadership role in ≥2 strategic initiatives', 'Shape the company view on which AI tools and partners to invest in', 'Build external relationships to stay current on AI'],
-    6: ['Shape enterprise structure, governance, operating model', 'Build influential relationships with regulators, partners, investors', 'Organisation scales effectively across markets', 'Represent the company externally as a credible voice on AI strategy', 'Set enterprise AI investment thesis']
+    1: ['Collaborate respectfully with team', 'Communicate clearly', 'Ask questions about bigger picture', 'Share useful AI prompts', 'Respect data boundaries with AI'],
+    2: ['Collaborate effectively across teams', 'Communicate proactively', 'Build trusted relationships', 'Share effective AI workflows', 'Coordinate AI use'],
+    3: ['Drive cross-functional collaboration', 'Communicate strategy clearly', 'Build stakeholder relationships', 'Champion AI adoption', 'Establish team AI norms'],
+    4: ['Lead cross-functional initiatives', 'Communicate vision across function', 'Build executive relationships', 'Drive AI adoption across teams', 'Create AI best practice forums'],
+    5: ['Drive enterprise-wide collaboration', 'Communicate at board level', 'Build strategic partnerships', 'Sponsor enterprise AI initiatives', 'Represent organisation on AI'],
+    6: ['Shape organisational culture', 'Communicate externally', 'Build industry relationships', 'Position organisation as AI leader', 'Drive industry AI dialogue']
   },
   leadership: {
-    1: ['Reliable attendance and punctuality', 'Positive, professional, respectful tone in all communication', 'Build AI literacy: complete onboarding to Langdock and approved tools', 'Know what NOT to use AI for (decisions, sensitive escalations)', 'Ask before trying a new AI tool'],
-    2: ['Reliability, professionalism, strong attendance, zero conduct issues', 'Promote teamwork, patient-first and company values daily', 'Model responsible AI use: privacy, accuracy, transparency', 'Follow the company review process before adopting new AI tools', 'Speak up when AI is being misused'],
-    3: ['Coach, mentor, delegate effectively', 'Build accountability, engagement, inclusion', 'Direct reports meet or exceed expectations', 'Build AI literacy in your team', 'Know what NOT to use AI for at this level'],
-    4: ['Coach managers and senior specialists; build succession', 'Set clear expectations; reinforce culture and values', 'Engagement scores above company average for two consecutive cycles', 'Ensure a clear coaching and feedback environment', 'Embed a cross-functional approach across the business'],
-    5: ['Build senior leadership capability and succession', 'Shape culture through visible, values-led leadership', 'Engagement above company average for two consecutive periods', 'Coach senior leaders on responsible, high-leverage AI use', 'Champion transparent communication about how AI is used internally'],
-    6: ['Build, lead, and evolve a high-performing executive team', 'Set and model cultural standards through visible, values-led leadership', 'Robust executive pipeline; strong engagement, trust, inclusion metrics', 'Hold the executive team accountable for responsible AI use', 'Invest in enterprise AI talent, governance, and culture']
+    1: ['Be reliable and punctual', 'Act professionally', 'Demonstrate company values', 'Model responsible AI use', 'Ask questions about AI'],
+    2: ['Take ownership of outcomes', 'Support colleagues', 'Embody company values', 'Mentor peers on AI', 'Flag AI concerns'],
+    3: ['Lead by example', 'Develop team members', 'Create inclusive environment', 'Champion responsible AI', 'Coach on AI skills'],
+    4: ['Set high standards', 'Develop future leaders', 'Drive culture and engagement', 'Set AI ethics expectations', 'Develop AI capability'],
+    5: ['Shape functional culture', 'Sponsor DEI initiatives', 'Drive engagement strategies', 'Set functional AI strategy', 'Ensure AI governance'],
+    6: ['Define organisational culture', 'Own executive development', 'Champion DEI at enterprise level', 'Own enterprise AI governance', 'Ensure board AI oversight']
   }
 };
 
-// ========== STATE ==========
 let currentUser = null;
 let currentView = 'my';
 let selectedTeamMember = null;
 let allProgress = {};
 
-// Auto-login from localStorage
 window.addEventListener('load', async () => {
   const savedEmail = localStorage.getItem('loggedInUser');
   if (savedEmail && employees[savedEmail]) {
@@ -459,19 +410,14 @@ window.addEventListener('load', async () => {
   }
 });
 
-// ========== FUNCTIONS ==========
 async function handleLogin() {
   const email = document.getElementById('emailInput').value.toLowerCase().trim();
   const password = document.getElementById('passwordInput').value;
-
   const user = employees[email];
   if (user && password === 'demo123') {
     currentUser = { email, ...user };
-      localStorage.setItem('loggedInUser', email);
-    
-    // Load progress from Google Sheets
+    localStorage.setItem('loggedInUser', email);
     allProgress[email] = await loadProgressFromSheets(email);
-    
     showApp();
   } else {
     document.getElementById('errorMsg').style.display = 'block';
@@ -480,10 +426,7 @@ async function handleLogin() {
 
 function handleLogout() {
   localStorage.removeItem('loggedInUser');
-  currentUser = null;
-  selectedTeamMember = null;
-  currentView = 'my';
-  allProgress = {};
+  currentUser = null; selectedTeamMember = null; currentView = 'my'; allProgress = {};
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('app').classList.remove('active');
   document.getElementById('emailInput').value = '';
@@ -494,10 +437,7 @@ function handleLogout() {
 function showApp() {
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('app').classList.add('active');
-  
-  const hasReports = currentUser.directReports && currentUser.directReports.length > 0;
-  document.getElementById('teamViewBtn').disabled = !hasReports;
-  
+  document.getElementById('teamViewBtn').disabled = !(currentUser.directReports && currentUser.directReports.length > 0);
   setView('my');
 }
 
@@ -507,129 +447,73 @@ function setView(view) {
   document.getElementById('teamViewBtn').classList.toggle('active', view === 'team');
   document.getElementById('myProgressionView').style.display = view === 'my' ? 'block' : 'none';
   document.getElementById('teamView').style.display = view === 'team' ? 'block' : 'none';
-  
-  if (view === 'my') {
-    renderMyProgression();
-  } else {
-    renderTeamView();
-  }
+  if (view === 'my') renderMyProgression(); else renderTeamView();
 }
 
-function getInitials(firstName, lastName) {
-  return ((firstName || '')[0] + (lastName || '')[0]).toUpperCase();
-}
+function getInitials(f, l) { return ((f||'')[0] + (l||'')[0]).toUpperCase(); }
+function getLevelInfo(id) { return levels.find(l => l.id === id) || levels[0]; }
+function getSublevelInfo(id) { return sublevels.find(s => s.id === id); }
+function getProgress(email) { return allProgress[email] || {}; }
+async function setProgress(email, data) { allProgress[email] = data; await saveProgressToSheets(email, data, currentUser.email); }
 
-function getLevelInfo(levelId) {
-  return levels.find(l => l.id === levelId) || levels[0];
-}
-
-function getSublevelInfo(sublevelId) {
-  return sublevels.find(s => s.id === sublevelId);
-}
-
-function getProgress(email) {
-  return allProgress[email] || {};
-}
-
-async function setProgress(email, data) {
-  allProgress[email] = data;
-  await saveProgressToSheets(email, data, currentUser.email);
-}
-
+// FIXED: Now calculates actual progress for levels 5/6 (no sublevels)
 function calculateProgress(email, levelId, sublevelId) {
   const progress = getProgress(email);
-  if (!sublevelId) return 100;
-  
-  let total = 0;
-  let checked = 0;
-  
+  const levelInfo = getLevelInfo(levelId);
+  const effectiveSublevel = levelInfo.hasSubs ? sublevelId : 1;
+  if (!effectiveSublevel) return 0;
+  let total = 0, checked = 0;
   competencies.forEach(comp => {
     const behavs = behaviours[comp.id][levelId] || [];
-    behavs.forEach((_, idx) => {
-      total++;
-      const key = `${comp.id}-${levelId}-${sublevelId}-${idx}`;
-      if (progress[key]) checked++;
-    });
+    behavs.forEach((_, idx) => { total++; if (progress[comp.id + '-' + levelId + '-' + effectiveSublevel + '-' + idx]) checked++; });
   });
-  
   return total > 0 ? Math.round((checked / total) * 100) : 0;
 }
 
 function calculateSkillProgress(email, compId, levelId, sublevelId) {
   const progress = getProgress(email);
-  if (!sublevelId) return 100;
-  
-  let total = 0;
-  let checked = 0;
-  
+  const levelInfo = getLevelInfo(levelId);
+  const effectiveSublevel = levelInfo.hasSubs ? sublevelId : 1;
+  if (!effectiveSublevel) return 0;
+  let total = 0, checked = 0;
   const behavs = behaviours[compId][levelId] || [];
-  behavs.forEach((_, idx) => {
-    total++;
-    const key = `${compId}-${levelId}-${sublevelId}-${idx}`;
-    if (progress[key]) checked++;
-  });
-  
+  behavs.forEach((_, idx) => { total++; if (progress[compId + '-' + levelId + '-' + effectiveSublevel + '-' + idx]) checked++; });
   return total > 0 ? Math.round((checked / total) * 100) : 0;
 }
 
-// ========== MY PROGRESSION VIEW ==========
 function renderMyProgression() {
   const user = currentUser;
   const levelInfo = getLevelInfo(user.level);
   const sublevelInfo = getSublevelInfo(user.sublevel);
   const initials = getInitials(user.firstName, user.lastName);
-  const fullName = `${user.firstName} ${user.lastName}`;
-  
+  const fullName = user.firstName + ' ' + user.lastName;
   document.getElementById('userAvatar').textContent = initials;
   document.getElementById('userName').textContent = fullName;
   document.getElementById('profileAvatar').textContent = initials;
   document.getElementById('profileName').textContent = fullName;
   document.getElementById('profileTitle').textContent = user.jobTitle;
-  document.getElementById('profileDept').textContent = `📁 ${user.department}`;
-  document.getElementById('profileLevel').textContent = `📊 ${levelInfo.short}${user.sublevel ? '.' + user.sublevel : ''}`;
-  document.getElementById('profileBonus').textContent = `💰 ${levelInfo.bonus}% Bonus`;
-  
-  const progress = calculateProgress(user.email, user.level, user.sublevel);
-  document.getElementById('profileProgress').textContent = `✅ ${progress}% Complete`;
-  
-  document.getElementById('readonlyNotice').style.display = 'flex';
-  document.getElementById('sublevelTrack').style.display = levelInfo.hasSubs ? 'block' : 'none';
-  
+  document.getElementById('profileDept').textContent = '📁 ' + user.department;
+  document.getElementById('profileLevel').textContent = '📊 ' + levelInfo.short + (user.sublevel ? '.' + user.sublevel : '');
+  document.getElementById('profileBonus').textContent = '💰 ' + levelInfo.bonus + '% Bonus';
+  document.getElementById('profileProgress').textContent = '✅ ' + calculateProgress(user.email, user.level, user.sublevel) + '% Complete';
   renderLevelNodes(user.level);
-  if (levelInfo.hasSubs) {
+  if (levelInfo.hasSubs && user.sublevel) {
+    document.getElementById('sublevelTrack').style.display = 'block';
     renderSublevelNodes(user.sublevel, levelInfo.short);
-    if (sublevelInfo) {
-      document.getElementById('sublevelDesc').textContent = sublevelInfo.desc;
-    }
-  }
-  
+    if (sublevelInfo) document.getElementById('sublevelDesc').textContent = sublevelInfo.desc;
+  } else { document.getElementById('sublevelTrack').style.display = 'none'; }
   renderSkills('skillsContainer', user.email, user.level, user.sublevel, false);
 }
 
 function renderLevelNodes(currentLevel) {
   const container = document.getElementById('levelNodes');
   container.innerHTML = '';
-  
   levels.forEach((lvl, idx) => {
-    if (idx > 0) {
-      const connector = document.createElement('div');
-      connector.className = 'level-connector' + (idx < currentLevel ? ' completed' : '');
-      container.appendChild(connector);
-    }
-    
-    const node = document.createElement('div');
-    node.className = 'level-node';
-    let dotClass = 'level-dot';
-    if (lvl.id < currentLevel) dotClass += ' completed';
-    else if (lvl.id === currentLevel) dotClass += ' current';
-    
-    let labelClass = 'level-label';
-    if (lvl.id === currentLevel) labelClass += ' current';
-    
-    node.innerHTML = `
-      <div class="${dotClass}">${lvl.id}</div>
-      <div class="${labelClass}">${lvl.short}</div>
-    `;
+    if (idx > 0) { const c = document.createElement('div'); c.className = 'level-connector' + (idx < currentLevel ? ' completed' : ''); container.appendChild(c); }
+    const node = document.createElement('div'); node.className = 'level-node';
+    let dotClass = 'level-dot'; if (lvl.id < currentLevel) dotClass += ' completed'; else if (lvl.id === currentLevel) dotClass += ' current';
+    let labelClass = 'level-label'; if (lvl.id === currentLevel) labelClass += ' current';
+    node.innerHTML = '<div class="' + dotClass + '">' + lvl.id + '</div><div class="' + labelClass + '">' + lvl.short + '</div>';
     container.appendChild(node);
   });
 }
@@ -638,129 +522,60 @@ function renderSublevelNodes(currentSublevel, levelName) {
   document.getElementById('currentLevelName').textContent = levelName;
   const container = document.getElementById('sublevelNodes');
   container.innerHTML = '';
-  
   sublevels.forEach((sl, idx) => {
-    if (idx > 0) {
-      const connector = document.createElement('div');
-      connector.className = 'sublevel-connector' + (idx < currentSublevel ? ' completed' : '');
-      container.appendChild(connector);
-    }
-    
-    const node = document.createElement('div');
-    node.className = 'sublevel-node';
-    let dotClass = 'sublevel-dot';
-    if (sl.id < currentSublevel) dotClass += ' completed';
-    else if (sl.id === currentSublevel) dotClass += ' current';
-    
-    let labelClass = 'sublevel-label';
-    if (sl.id === currentSublevel) labelClass += ' current';
-    
-    node.innerHTML = `
-      <div class="${dotClass}">.${sl.id}</div>
-      <div class="${labelClass}">${sl.name}</div>
-    `;
+    if (idx > 0) { const c = document.createElement('div'); c.className = 'sublevel-connector' + (idx < currentSublevel ? ' completed' : ''); container.appendChild(c); }
+    const node = document.createElement('div'); node.className = 'sublevel-node';
+    let dotClass = 'sublevel-dot'; if (sl.id < currentSublevel) dotClass += ' completed'; else if (sl.id === currentSublevel) dotClass += ' current';
+    let labelClass = 'sublevel-label'; if (sl.id === currentSublevel) labelClass += ' current';
+    node.innerHTML = '<div class="' + dotClass + '">.' + sl.id + '</div><div class="' + labelClass + '">' + sl.name + '</div>';
     container.appendChild(node);
   });
 }
 
-// ========== TEAM VIEW ==========
+// FIXED: Parallel loading for speed
 async function renderTeamView() {
   const container = document.getElementById('teamGrid');
+  container.innerHTML = '<div style="padding: 20px; color: var(--text-light);">Loading team...</div>';
+  document.getElementById('teamTitle').textContent = 'Direct Reports (' + currentUser.directReports.length + ')';
+  
+  // Load ALL progress in PARALLEL (much faster!)
+  await Promise.all(currentUser.directReports.map(async (email) => {
+    if (!allProgress[email]) allProgress[email] = await loadProgressFromSheets(email);
+  }));
+  
   container.innerHTML = '';
-  
-  document.getElementById('teamTitle').textContent = `Direct Reports (${currentUser.directReports.length})`;
-  
-  // Load progress for all direct reports
-  for (const reportEmail of currentUser.directReports) {
-    if (!allProgress[reportEmail]) {
-      allProgress[reportEmail] = await loadProgressFromSheets(reportEmail);
-    }
-  }
-  
   currentUser.directReports.forEach(reportEmail => {
-    const report = employees[reportEmail];
-    if (!report) return;
-    
+    const report = employees[reportEmail]; if (!report) return;
     const levelInfo = getLevelInfo(report.level);
     const progress = calculateProgress(reportEmail, report.level, report.sublevel);
-    const initials = getInitials(report.firstName, report.lastName);
-    
     const card = document.createElement('div');
     card.className = 'team-card' + (selectedTeamMember === reportEmail ? ' selected' : '');
     card.onclick = () => selectTeamMember(reportEmail);
-    
-    card.innerHTML = `
-      <div class="team-card-header">
-        <div class="team-card-avatar">${initials}</div>
-        <div class="team-card-info">
-          <h4>${report.firstName} ${report.lastName}</h4>
-          <p>${report.jobTitle}</p>
-        </div>
-      </div>
-      <div class="team-card-meta">
-        <span class="team-card-badge level">${levelInfo.short}${report.sublevel ? '.' + report.sublevel : ''}</span>
-        <span class="team-card-badge">${report.department}</span>
-        <span class="team-card-badge">${progress}% complete</span>
-      </div>
-    `;
+    card.innerHTML = '<div class="team-card-header"><div class="team-card-avatar">' + getInitials(report.firstName, report.lastName) + '</div><div class="team-card-info"><h4>' + report.firstName + ' ' + report.lastName + '</h4><p>' + report.jobTitle + '</p></div></div><div class="team-card-meta"><span class="team-card-badge level">' + levelInfo.short + (report.sublevel ? '.' + report.sublevel : '') + '</span><span class="team-card-badge">' + report.department + '</span><span class="team-card-badge">' + progress + '% complete</span></div>';
     container.appendChild(card);
   });
-  
-  if (selectedTeamMember) {
-    renderSelectedMember();
-  } else {
-    document.getElementById('selectedMemberSection').style.display = 'none';
-  }
+  if (selectedTeamMember) renderSelectedMember(); else document.getElementById('selectedMemberSection').style.display = 'none';
 }
 
-function selectTeamMember(email) {
-  selectedTeamMember = email;
-  renderTeamView();
-}
+function selectTeamMember(email) { selectedTeamMember = email; renderTeamView(); }
 
 function renderSelectedMember() {
-  const member = employees[selectedTeamMember];
-  if (!member) return;
-  
+  const member = employees[selectedTeamMember]; if (!member) return;
   const levelInfo = getLevelInfo(member.level);
   const sublevelInfo = getSublevelInfo(member.sublevel);
-  
   document.getElementById('selectedMemberSection').style.display = 'block';
-  document.getElementById('selectedMemberName').textContent = `${member.firstName} ${member.lastName}'s Progression`;
-  document.getElementById('selectedMemberInfo').textContent = `${member.jobTitle} • ${levelInfo.short}${member.sublevel ? '.' + member.sublevel + ' (' + sublevelInfo?.name + ')' : ''} • ${member.department}`;
-  
+  document.getElementById('selectedMemberName').textContent = member.firstName + ' ' + member.lastName + "'s Progression";
+  document.getElementById('selectedMemberInfo').textContent = member.jobTitle + ' • ' + levelInfo.short + (member.sublevel && sublevelInfo ? '.' + member.sublevel + ' (' + sublevelInfo.name + ')' : '') + ' • ' + member.department;
   renderSkills('teamSkillsContainer', selectedTeamMember, member.level, member.sublevel, true);
 }
 
-// ========== SKILLS RENDERING ==========
 function renderSkills(containerId, email, levelId, sublevelId, canEdit) {
   const container = document.getElementById(containerId);
   container.innerHTML = '';
-  
   competencies.forEach(comp => {
-    const row = document.createElement('div');
-    row.className = 'skill-row';
-    row.id = `${containerId}-skill-${comp.id}`;
-    
+    const row = document.createElement('div'); row.className = 'skill-row'; row.id = containerId + '-skill-' + comp.id;
     const progress = calculateSkillProgress(email, comp.id, levelId, sublevelId);
-    
-    row.innerHTML = `
-      <div class="skill-header" onclick="toggleSkill('${containerId}-skill-${comp.id}')">
-        <div class="skill-icon ${comp.iconClass}">${comp.icon}</div>
-        <div class="skill-info">
-          <h3>${comp.name}</h3>
-          <p>${comp.desc}</p>
-        </div>
-        <div class="skill-progress">
-          <div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div>
-          <span class="progress-text">${progress}%</span>
-        </div>
-        <div class="expand-icon">▼</div>
-      </div>
-      <div class="skill-levels">
-        ${renderSkillLevels(email, comp, levelId, sublevelId, canEdit, containerId)}
-      </div>
-    `;
+    row.innerHTML = '<div class="skill-header" onclick="toggleSkill(\'' + containerId + '-skill-' + comp.id + '\')"><div class="skill-icon ' + comp.iconClass + '">' + comp.icon + '</div><div class="skill-info"><h3>' + comp.name + '</h3><p>' + comp.desc + '</p></div><div class="skill-progress"><div class="progress-bar"><div class="progress-fill" style="width: ' + progress + '%"></div></div><span class="progress-text">' + progress + '%</span></div><div class="expand-icon">▼</div></div><div class="skill-levels">' + renderSkillLevels(email, comp, levelId, sublevelId, canEdit, containerId) + '</div>';
     container.appendChild(row);
   });
 }
@@ -770,115 +585,47 @@ function renderSkillLevels(email, comp, levelId, sublevelId, canEdit, containerI
   const behavs = behaviours[comp.id][levelId] || [];
   const userProgress = getProgress(email);
   
-  if (!levelInfo.hasSubs || !sublevelId) {
-    return `
-      <div class="levels-grid" style="grid-template-columns: 1fr;">
-        <div class="level-column current">
-          <div class="level-column-header">
-            <div class="level-column-title">${levelInfo.short} <span class="badge">Current</span></div>
-          </div>
-          <div class="level-column-body">
-            ${behavs.map((behav, idx) => `
-              <div class="behaviour-item">
-                <div class="behaviour-checkbox auto-checked">✓</div>
-                <div class="behaviour-content">
-                  <div class="behaviour-text">${behav}</div>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      </div>
-    `;
+  if (!levelInfo.hasSubs) {
+    let html = '<div class="levels-grid" style="grid-template-columns: 1fr;"><div class="level-column current"><div class="level-column-header"><div class="level-column-title">' + levelInfo.short + ' <span class="badge">Current</span></div></div><div class="level-column-body">';
+    behavs.forEach((behav, idx) => {
+      const key = comp.id + '-' + levelId + '-1-' + idx;
+      const isChecked = userProgress[key] === true;
+      let checkboxClass = 'behaviour-checkbox' + (isChecked ? ' checked' : '');
+      let clickHandler = canEdit ? ' onclick="toggleBehaviour(\'' + email + '\', \'' + key + '\', \'' + containerId + '\')"' : '';
+      if (!canEdit) checkboxClass += ' readonly';
+      html += '<div class="behaviour-item"><div class="' + checkboxClass + '"' + clickHandler + '>' + (isChecked ? '✓' : '') + '</div><div class="behaviour-text">' + behav + '</div></div>';
+    });
+    return html + '</div></div></div>';
   }
   
   let html = '<div class="levels-grid">';
-  
-  sublevels.forEach((sl) => {
-    let columnClass = 'level-column';
-    let badge = '';
-    let badgeClass = '';
-    
-    if (sl.id < sublevelId) {
-      columnClass += ' completed';
-      badge = 'Done';
-      badgeClass = 'completed';
-    } else if (sl.id === sublevelId) {
-      columnClass += ' current';
-      badge = 'Current';
-      badgeClass = '';
-    } else {
-      columnClass += ' locked';
-      badge = 'Locked';
-      badgeClass = 'locked';
-    }
-    
-    html += `
-      <div class="${columnClass}">
-        <div class="level-column-header">
-          <div class="level-column-title">.${sl.id} <span class="badge ${badgeClass}">${badge}</span></div>
-          <div class="level-column-subtitle">${sl.name}</div>
-        </div>
-        <div class="level-column-body">
-    `;
-    
+  sublevels.forEach(sl => {
+    let columnClass = 'level-column', badge = '', badgeClass = '';
+    if (sl.id < sublevelId) { columnClass += ' completed'; badge = 'Done'; badgeClass = 'completed'; }
+    else if (sl.id === sublevelId) { columnClass += ' current'; badge = 'Current'; }
+    else { columnClass += ' locked'; badge = 'Locked'; badgeClass = 'locked'; }
+    html += '<div class="' + columnClass + '"><div class="level-column-header"><div class="level-column-title">.' + sl.id + ' <span class="badge ' + badgeClass + '">' + badge + '</span></div><div class="level-column-subtitle">' + sl.name + '</div></div><div class="level-column-body">';
     behavs.forEach((behav, idx) => {
-      const key = `${comp.id}-${levelId}-${sl.id}-${idx}`;
-      let checkboxClass = 'behaviour-checkbox';
-      let isChecked = false;
-      let textClass = 'behaviour-text';
-      let clickHandler = '';
-      
-      if (sl.id < sublevelId) {
-        checkboxClass += ' auto-checked';
-        isChecked = true;
-      } else if (sl.id === sublevelId) {
-        isChecked = userProgress[key] === true;
-        if (isChecked) checkboxClass += ' checked';
-        if (canEdit) {
-          clickHandler = `onclick="toggleBehaviour('${email}', '${key}', '${containerId}')"`;
-        } else {
-          checkboxClass += ' readonly';
-        }
-      } else {
-        checkboxClass += ' disabled';
-        textClass += ' disabled';
-      }
-      
-      html += `
-        <div class="behaviour-item">
-          <div class="${checkboxClass}" ${clickHandler} data-key="${key}">
-            ${isChecked ? '✓' : ''}
-          </div>
-          <div class="behaviour-content">
-            <div class="${textClass}">${behav}</div>
-          </div>
-        </div>
-      `;
+      const key = comp.id + '-' + levelId + '-' + sl.id + '-' + idx;
+      let checkboxClass = 'behaviour-checkbox', isChecked = false, textClass = 'behaviour-text', clickHandler = '';
+      if (sl.id < sublevelId) { checkboxClass += ' auto-checked'; isChecked = true; }
+      else if (sl.id === sublevelId) { isChecked = userProgress[key] === true; if (isChecked) checkboxClass += ' checked'; if (canEdit) clickHandler = ' onclick="toggleBehaviour(\'' + email + '\', \'' + key + '\', \'' + containerId + '\')"'; else checkboxClass += ' readonly'; }
+      else { checkboxClass += ' disabled'; textClass += ' disabled'; }
+      html += '<div class="behaviour-item"><div class="' + checkboxClass + '"' + clickHandler + '>' + (isChecked ? '✓' : '') + '</div><div class="' + textClass + '">' + behav + '</div></div>';
     });
-    
     html += '</div></div>';
   });
-  
-  html += '</div>';
-  return html;
+  return html + '</div>';
 }
 
-function toggleSkill(skillId) {
-  const row = document.getElementById(skillId);
-  if (row) row.classList.toggle('expanded');
-}
+function toggleSkill(skillId) { const row = document.getElementById(skillId); if (row) row.classList.toggle('expanded'); }
 
 async function toggleBehaviour(email, key, containerId) {
   const progress = getProgress(email);
   progress[key] = !progress[key];
   await setProgress(email, progress);
-  
-  if (containerId === 'teamSkillsContainer') {
-    renderSelectedMember();
-    renderTeamView();
-  }
-  showToast('Progress saved to Google Sheets!');
+  if (containerId === 'teamSkillsContainer') { renderSelectedMember(); renderTeamView(); }
+  showToast('Progress saved!');
 }
 
 function showToast(message) {
@@ -893,51 +640,29 @@ function exportAssessment() {
   const email = currentView === 'team' && selectedTeamMember ? selectedTeamMember : currentUser.email;
   const levelInfo = getLevelInfo(user.level);
   const sublevelInfo = getSublevelInfo(user.sublevel);
-  
-  let content = `SIMPLE ONLINE HEALTHCARE - CAREER PROGRESSION\n`;
-  content += `${'='.repeat(60)}\n\n`;
-  content += `Name: ${user.firstName} ${user.lastName}\n`;
-  content += `Job Title: ${user.jobTitle}\n`;
-  content += `Department: ${user.department}\n`;
-  content += `Level: ${levelInfo.name}${sublevelInfo ? '.' + user.sublevel + ' (' + sublevelInfo.name + ')' : ''}\n`;
-  content += `Bonus: ${levelInfo.bonus}%\n`;
-  content += `Overall Progress: ${calculateProgress(email, user.level, user.sublevel)}%\n`;
-  content += `Export Date: ${new Date().toLocaleDateString()}\n\n`;
-  content += `${'='.repeat(60)}\n\n`;
-  
+  const effectiveSublevel = levelInfo.hasSubs ? user.sublevel : 1;
+  let content = 'SIMPLE ONLINE HEALTHCARE - CAREER PROGRESSION\n============================================================\n\n';
+  content += 'Name: ' + user.firstName + ' ' + user.lastName + '\nJob Title: ' + user.jobTitle + '\nDepartment: ' + user.department + '\n';
+  content += 'Level: ' + levelInfo.name + (sublevelInfo ? '.' + user.sublevel + ' (' + sublevelInfo.name + ')' : '') + '\n';
+  content += 'Bonus: ' + levelInfo.bonus + '%\nOverall Progress: ' + calculateProgress(email, user.level, user.sublevel) + '%\n';
+  content += 'Export Date: ' + new Date().toLocaleDateString() + '\n\n============================================================\n\n';
   const progress = getProgress(email);
-  
   competencies.forEach(comp => {
-    const skillProgress = calculateSkillProgress(email, comp.id, user.level, user.sublevel);
-    content += `${comp.name} (${skillProgress}% complete)\n`;
-    content += `${'-'.repeat(40)}\n`;
-    
-    const behavs = behaviours[comp.id][user.level] || [];
-    behavs.forEach((behav, idx) => {
-      const key = `${comp.id}-${user.level}-${user.sublevel}-${idx}`;
-      const checked = progress[key] ? '✓' : '○';
-      content += `  ${checked} ${behav}\n`;
+    content += comp.name + ' (' + calculateSkillProgress(email, comp.id, user.level, user.sublevel) + '% complete)\n----------------------------------------\n';
+    (behaviours[comp.id][user.level] || []).forEach((behav, idx) => {
+      content += '  ' + (progress[comp.id + '-' + user.level + '-' + effectiveSublevel + '-' + idx] ? '✓' : '○') + ' ' + behav + '\n';
     });
     content += '\n';
   });
-  
   const blob = new Blob([content], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `progression-${user.firstName.toLowerCase()}-${user.lastName.toLowerCase()}.txt`;
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'progression-' + user.firstName.toLowerCase() + '-' + user.lastName.toLowerCase() + '.txt';
   a.click();
-  URL.revokeObjectURL(url);
 }
 
-// Enter key handlers
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('passwordInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') handleLogin();
-  });
-  document.getElementById('emailInput').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') document.getElementById('passwordInput').focus();
-  });
+  document.getElementById('passwordInput').addEventListener('keypress', e => { if (e.key === 'Enter') handleLogin(); });
+  document.getElementById('emailInput').addEventListener('keypress', e => { if (e.key === 'Enter') document.getElementById('passwordInput').focus(); });
 });
 </script>
 </body>
