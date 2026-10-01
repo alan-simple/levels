@@ -449,6 +449,16 @@ let currentView = 'my';
 let selectedTeamMember = null;
 let allProgress = {};
 
+// Auto-login from localStorage
+window.addEventListener('load', async () => {
+  const savedEmail = localStorage.getItem('loggedInUser');
+  if (savedEmail && employees[savedEmail]) {
+    currentUser = { email: savedEmail, ...employees[savedEmail] };
+    allProgress[savedEmail] = await loadProgressFromSheets(savedEmail);
+    showApp();
+  }
+});
+
 // ========== FUNCTIONS ==========
 async function handleLogin() {
   const email = document.getElementById('emailInput').value.toLowerCase().trim();
@@ -457,6 +467,7 @@ async function handleLogin() {
   const user = employees[email];
   if (user && password === 'demo123') {
     currentUser = { email, ...user };
+      localStorage.setItem('loggedInUser', email);
     
     // Load progress from Google Sheets
     allProgress[email] = await loadProgressFromSheets(email);
@@ -468,6 +479,7 @@ async function handleLogin() {
 }
 
 function handleLogout() {
+  localStorage.removeItem('loggedInUser');
   currentUser = null;
   selectedTeamMember = null;
   currentView = 'my';
