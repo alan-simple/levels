@@ -34,6 +34,7 @@
     .form-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 168, 157, 0.1); }
     .login-btn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; }
     .login-btn:hover { background: var(--primary-dark); }
+    .login-btn:disabled { background: var(--text-light); cursor: not-allowed; }
     .error-msg { background: #fef2f2; color: #dc2626; padding: 12px 16px; border-radius: 10px; margin-bottom: 20px; font-size: 14px; display: none; }
     
     .app { display: none; min-height: 100vh; }
@@ -49,6 +50,8 @@
     .view-btn.active { background: white; color: var(--primary); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
     .view-btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .export-btn { padding: 10px 20px; background: var(--primary); color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .settings-btn { padding: 10px 16px; background: var(--bg); color: var(--text); border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .settings-btn:hover { background: var(--border); }
     .user-pill { display: flex; align-items: center; gap: 10px; background: var(--bg); padding: 6px 14px 6px 6px; border-radius: 100px; }
     .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 12px; }
     .user-name { font-weight: 600; font-size: 13px; }
@@ -172,6 +175,27 @@
     .promotion-toast h3 { font-size: 18px; margin-bottom: 4px; }
     .promotion-toast p { font-size: 14px; opacity: 0.9; }
     
+    /* Modal styles */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-overlay.show { display: flex; }
+    .modal { background: white; border-radius: 20px; padding: 32px; width: 100%; max-width: 420px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+    .modal h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .modal p { color: var(--text-light); font-size: 14px; margin-bottom: 24px; }
+    .modal .form-group { margin-bottom: 16px; }
+    .modal-buttons { display: flex; gap: 12px; margin-top: 24px; }
+    .modal-btn { flex: 1; padding: 14px; border: none; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; }
+    .modal-btn.primary { background: var(--primary); color: white; }
+    .modal-btn.primary:hover { background: var(--primary-dark); }
+    .modal-btn.secondary { background: var(--bg); color: var(--text); }
+    .modal-btn.secondary:hover { background: var(--border); }
+    .modal-btn.danger { background: #dc2626; color: white; }
+    .modal-error { background: #fef2f2; color: #dc2626; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
+    .modal-success { background: var(--success-light); color: var(--success); padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: none; }
+    
+    /* Reset password button in team view */
+    .reset-password-btn { padding: 8px 16px; background: #FEF3C7; color: #92400E; border: 1px solid #F59E0B; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; margin-left: 12px; }
+    .reset-password-btn:hover { background: #FDE68A; }
+    
     @media (max-width: 1200px) { .levels-grid { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 768px) { 
       .levels-grid { grid-template-columns: repeat(2, 1fr); }
@@ -193,7 +217,7 @@
         <div class="login-logo-icon">S</div>
         <span class="login-logo-text">Simple Progression</span>
       </div>
-      <p class="login-subtitle">Sign in to view your career progression framework</p>
+      <p class="login-subtitle" id="loginSubtitle">Sign in to view your career progression framework</p>
       <div class="error-msg" id="errorMsg">Invalid credentials. Please try again.</div>
       <div class="form-group">
         <label class="form-label">Email</label>
@@ -203,8 +227,19 @@
         <label class="form-label">Password</label>
         <input type="password" class="form-input" id="passwordInput" placeholder="Enter your password">
       </div>
-      <button class="login-btn" onclick="handleLogin()">Sign In</button>
-      <p style="margin-top: 16px; font-size: 12px; color: var(--text-light); text-align: center;">Demo: Use firstname@simpleonlinehealthcare.com with password "demo123"</p>
+      <!-- New password fields for first-time login -->
+      <div id="newPasswordFields" style="display: none;">
+        <div class="form-group">
+          <label class="form-label">New Password</label>
+          <input type="password" class="form-input" id="newPasswordInput" placeholder="Enter new password (min 8 characters)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Confirm New Password</label>
+          <input type="password" class="form-input" id="confirmPasswordInput" placeholder="Confirm new password">
+        </div>
+      </div>
+      <button class="login-btn" id="loginBtn" onclick="handleLogin()">Sign In</button>
+      <p style="margin-top: 16px; font-size: 12px; color: var(--text-light); text-align: center;">Default password for new users: Welcome123</p>
     </div>
   </div>
   
@@ -218,6 +253,7 @@
             <button class="view-btn" onclick="setView('team')" id="teamViewBtn" disabled>My Team</button>
           </div>
           <button class="export-btn" onclick="exportAssessment()"><span>📥</span> Export</button>
+          <button class="settings-btn" onclick="showChangePasswordModal()">🔐 Password</button>
           <div class="user-pill">
             <div class="user-avatar" id="userAvatar">AC</div>
             <span class="user-name" id="userName">Name</span>
@@ -281,7 +317,10 @@
           <div class="team-grid" id="teamGrid"></div>
         </div>
         <div id="selectedMemberSection" style="display: none;">
-          <div class="team-title" id="selectedMemberName" style="margin-bottom: 8px;">Selected Member</div>
+          <div style="display: flex; align-items: center; margin-bottom: 8px;">
+            <div class="team-title" id="selectedMemberName" style="margin-bottom: 0;">Selected Member</div>
+            <button class="reset-password-btn" id="resetPasswordBtn" onclick="showResetPasswordModal()">🔑 Reset Password</button>
+          </div>
           <p style="color: var(--text-light); margin-bottom: 24px;" id="selectedMemberInfo">Info</p>
           <div class="skills-container" id="teamSkillsContainer"></div>
         </div>
@@ -296,9 +335,95 @@
     <p id="promotionText">Changes saved successfully.</p>
   </div>
 
+  <!-- Change Password Modal -->
+  <div class="modal-overlay" id="changePasswordModal">
+    <div class="modal">
+      <h2>Change Password</h2>
+      <p>Enter your current password and choose a new one.</p>
+      <div class="modal-error" id="changePasswordError"></div>
+      <div class="modal-success" id="changePasswordSuccess"></div>
+      <div class="form-group">
+        <label class="form-label">Current Password</label>
+        <input type="password" class="form-input" id="currentPasswordInput" placeholder="Enter current password">
+      </div>
+      <div class="form-group">
+        <label class="form-label">New Password</label>
+        <input type="password" class="form-input" id="changeNewPasswordInput" placeholder="Enter new password (min 8 characters)">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm New Password</label>
+        <input type="password" class="form-input" id="changeConfirmPasswordInput" placeholder="Confirm new password">
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-btn secondary" onclick="hideChangePasswordModal()">Cancel</button>
+        <button class="modal-btn primary" onclick="changePassword()">Change Password</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reset Password Modal (for managers) -->
+  <div class="modal-overlay" id="resetPasswordModal">
+    <div class="modal">
+      <h2>Reset Password</h2>
+      <p id="resetPasswordText">Reset password for this team member?</p>
+      <div class="modal-error" id="resetPasswordError"></div>
+      <div class="modal-success" id="resetPasswordSuccess"></div>
+      <p style="background: #FEF3C7; padding: 12px; border-radius: 8px; font-size: 13px; color: #92400E;">
+        This will reset their password to <strong>Welcome123</strong> and they will be required to change it on next login.
+      </p>
+      <div class="modal-buttons">
+        <button class="modal-btn secondary" onclick="hideResetPasswordModal()">Cancel</button>
+        <button class="modal-btn danger" onclick="resetTeamMemberPassword()">Reset Password</button>
+      </div>
+    </div>
+  </div>
+
 <script src="employees.js"></script>
 <script>
-const SHEETS_API = 'https://script.google.com/macros/s/AKfycbwmoya5N9J-Pf7XkrEs00Y5Fp9vj7xghojqEUsfhDSkVwga4PrApBBy2M3arSEcg9SOSA/exec';
+const SHEETS_API = 'https://script.google.com/macros/s/AKfycbzg6ym55hUeUs15ZTZiel0QII9KRTjT1XV2qyrLYAKbY6m90f5-wuAGf8dtmPNCwLoV-w/exec';
+const ADMIN_EMAIL = 'alan@simpleonlinehealthcare.com';
+const DEFAULT_PASSWORD = 'Welcome123';
+
+// Password-related API calls
+async function verifyPassword(email, password) {
+  try {
+    const response = await fetch(SHEETS_API + '?action=get&email=' + encodeURIComponent(email));
+    const data = await response.json();
+    if (data.success) {
+      const storedPassword = data.password || DEFAULT_PASSWORD;
+      const mustChange = data.mustChangePassword === 'TRUE' || data.mustChangePassword === true;
+      return { valid: password === storedPassword, mustChangePassword: mustChange, storedPassword };
+    }
+  } catch (e) { console.error('Password verification failed:', e); }
+  return { valid: false, mustChangePassword: false };
+}
+
+async function updatePassword(email, newPassword, updatedBy) {
+  try {
+    const params = new URLSearchParams({ 
+      action: 'changePassword', 
+      email, 
+      newPassword,
+      updatedBy
+    });
+    const response = await fetch(SHEETS_API + '?' + params.toString());
+    const data = await response.json();
+    return data.success;
+  } catch (e) { console.error('Password update failed:', e); return false; }
+}
+
+async function resetPasswordForUser(email, adminEmail) {
+  try {
+    const params = new URLSearchParams({ 
+      action: 'resetPassword', 
+      email, 
+      adminEmail
+    });
+    const response = await fetch(SHEETS_API + '?' + params.toString());
+    const data = await response.json();
+    return data.success;
+  } catch (e) { console.error('Password reset failed:', e); return false; }
+}
 
 async function loadProgressFromSheets(email) {
   try {
@@ -400,13 +525,13 @@ let currentUser = null;
 let currentView = 'my';
 let selectedTeamMember = null;
 let allProgress = {};
+let pendingPasswordChange = false;
 
 window.addEventListener('load', async () => {
   const savedEmail = localStorage.getItem('loggedInUser');
   if (savedEmail && employees[savedEmail]) {
     currentUser = { email: savedEmail, ...employees[savedEmail] };
     showApp();
-    // Load progress in background after showing app
     try {
       allProgress[savedEmail] = await loadProgressFromSheets(savedEmail);
       renderMyProgression();
@@ -420,23 +545,89 @@ async function handleLogin() {
   const email = document.getElementById('emailInput').value.toLowerCase().trim();
   const password = document.getElementById('passwordInput').value;
   const user = employees[email];
-  if (user && password === 'demo123') {
-    currentUser = { email, ...user };
-    localStorage.setItem('loggedInUser', email);
-    allProgress[email] = await loadProgressFromSheets(email);
-    showApp();
-  } else {
+  
+  if (!user) {
+    document.getElementById('errorMsg').textContent = 'Email not found. Please check and try again.';
     document.getElementById('errorMsg').style.display = 'block';
+    return;
   }
+
+  // If we're in password change mode (first login)
+  if (pendingPasswordChange) {
+    const newPassword = document.getElementById('newPasswordInput').value;
+    const confirmPassword = document.getElementById('confirmPasswordInput').value;
+    
+    if (newPassword.length < 8) {
+      document.getElementById('errorMsg').textContent = 'New password must be at least 8 characters.';
+      document.getElementById('errorMsg').style.display = 'block';
+      return;
+    }
+    
+    if (newPassword !== confirmPassword) {
+      document.getElementById('errorMsg').textContent = 'Passwords do not match.';
+      document.getElementById('errorMsg').style.display = 'block';
+      return;
+    }
+    
+    // Update password
+    const success = await updatePassword(email, newPassword, email);
+    if (success) {
+      pendingPasswordChange = false;
+      document.getElementById('newPasswordFields').style.display = 'none';
+      document.getElementById('loginBtn').textContent = 'Sign In';
+      document.getElementById('loginSubtitle').textContent = 'Sign in to view your career progression framework';
+      
+      currentUser = { email, ...user };
+      localStorage.setItem('loggedInUser', email);
+      allProgress[email] = await loadProgressFromSheets(email);
+      showApp();
+    } else {
+      document.getElementById('errorMsg').textContent = 'Failed to update password. Please try again.';
+      document.getElementById('errorMsg').style.display = 'block';
+    }
+    return;
+  }
+
+  // Normal login - verify password
+  const result = await verifyPassword(email, password);
+  
+  if (!result.valid) {
+    document.getElementById('errorMsg').textContent = 'Invalid password. Please try again.';
+    document.getElementById('errorMsg').style.display = 'block';
+    return;
+  }
+  
+  // Check if must change password
+  if (result.mustChangePassword) {
+    pendingPasswordChange = true;
+    document.getElementById('errorMsg').style.display = 'none';
+    document.getElementById('newPasswordFields').style.display = 'block';
+    document.getElementById('loginBtn').textContent = 'Set New Password';
+    document.getElementById('loginSubtitle').textContent = 'Please set a new password to continue';
+    document.getElementById('newPasswordInput').focus();
+    return;
+  }
+  
+  // Successful login
+  currentUser = { email, ...user };
+  localStorage.setItem('loggedInUser', email);
+  allProgress[email] = await loadProgressFromSheets(email);
+  showApp();
 }
 
 function handleLogout() {
   localStorage.removeItem('loggedInUser');
   currentUser = null; selectedTeamMember = null; currentView = 'my'; allProgress = {};
+  pendingPasswordChange = false;
   document.getElementById('loginScreen').style.display = 'flex';
   document.getElementById('app').classList.remove('active');
   document.getElementById('emailInput').value = '';
   document.getElementById('passwordInput').value = '';
+  document.getElementById('newPasswordInput').value = '';
+  document.getElementById('confirmPasswordInput').value = '';
+  document.getElementById('newPasswordFields').style.display = 'none';
+  document.getElementById('loginBtn').textContent = 'Sign In';
+  document.getElementById('loginSubtitle').textContent = 'Sign in to view your career progression framework';
   document.getElementById('errorMsg').style.display = 'none';
 }
 
@@ -445,6 +636,89 @@ function showApp() {
   document.getElementById('app').classList.add('active');
   document.getElementById('teamViewBtn').disabled = !(currentUser.directReports && currentUser.directReports.length > 0);
   setView('my');
+}
+
+// Password Modal Functions
+function showChangePasswordModal() {
+  document.getElementById('changePasswordModal').classList.add('show');
+  document.getElementById('currentPasswordInput').value = '';
+  document.getElementById('changeNewPasswordInput').value = '';
+  document.getElementById('changeConfirmPasswordInput').value = '';
+  document.getElementById('changePasswordError').style.display = 'none';
+  document.getElementById('changePasswordSuccess').style.display = 'none';
+}
+
+function hideChangePasswordModal() {
+  document.getElementById('changePasswordModal').classList.remove('show');
+}
+
+async function changePassword() {
+  const currentPassword = document.getElementById('currentPasswordInput').value;
+  const newPassword = document.getElementById('changeNewPasswordInput').value;
+  const confirmPassword = document.getElementById('changeConfirmPasswordInput').value;
+  
+  document.getElementById('changePasswordError').style.display = 'none';
+  document.getElementById('changePasswordSuccess').style.display = 'none';
+  
+  // Verify current password
+  const result = await verifyPassword(currentUser.email, currentPassword);
+  if (!result.valid) {
+    document.getElementById('changePasswordError').textContent = 'Current password is incorrect.';
+    document.getElementById('changePasswordError').style.display = 'block';
+    return;
+  }
+  
+  if (newPassword.length < 8) {
+    document.getElementById('changePasswordError').textContent = 'New password must be at least 8 characters.';
+    document.getElementById('changePasswordError').style.display = 'block';
+    return;
+  }
+  
+  if (newPassword !== confirmPassword) {
+    document.getElementById('changePasswordError').textContent = 'New passwords do not match.';
+    document.getElementById('changePasswordError').style.display = 'block';
+    return;
+  }
+  
+  const success = await updatePassword(currentUser.email, newPassword, currentUser.email);
+  if (success) {
+    document.getElementById('changePasswordSuccess').textContent = 'Password changed successfully!';
+    document.getElementById('changePasswordSuccess').style.display = 'block';
+    setTimeout(() => hideChangePasswordModal(), 2000);
+  } else {
+    document.getElementById('changePasswordError').textContent = 'Failed to change password. Please try again.';
+    document.getElementById('changePasswordError').style.display = 'block';
+  }
+}
+
+function showResetPasswordModal() {
+  if (!selectedTeamMember) return;
+  const member = employees[selectedTeamMember];
+  document.getElementById('resetPasswordText').textContent = 'Reset password for ' + member.firstName + ' ' + member.lastName + '?';
+  document.getElementById('resetPasswordModal').classList.add('show');
+  document.getElementById('resetPasswordError').style.display = 'none';
+  document.getElementById('resetPasswordSuccess').style.display = 'none';
+}
+
+function hideResetPasswordModal() {
+  document.getElementById('resetPasswordModal').classList.remove('show');
+}
+
+async function resetTeamMemberPassword() {
+  if (!selectedTeamMember) return;
+  
+  document.getElementById('resetPasswordError').style.display = 'none';
+  document.getElementById('resetPasswordSuccess').style.display = 'none';
+  
+  const success = await resetPasswordForUser(selectedTeamMember, currentUser.email);
+  if (success) {
+    document.getElementById('resetPasswordSuccess').textContent = 'Password reset successfully! They will need to set a new password on next login.';
+    document.getElementById('resetPasswordSuccess').style.display = 'block';
+    setTimeout(() => hideResetPasswordModal(), 3000);
+  } else {
+    document.getElementById('resetPasswordError').textContent = 'Failed to reset password. Please try again.';
+    document.getElementById('resetPasswordError').style.display = 'block';
+  }
 }
 
 function setView(view) {
@@ -462,7 +736,6 @@ function getSublevelInfo(id) { return sublevels.find(s => s.id === id); }
 function getProgress(email) { return allProgress[email] || {}; }
 async function setProgress(email, data) { allProgress[email] = data; await saveProgressToSheets(email, data, currentUser.email); }
 
-// FIXED: Now calculates actual progress for levels 5/6 (no sublevels)
 function calculateProgress(email, levelId, sublevelId) {
   const progress = getProgress(email);
   const levelInfo = getLevelInfo(levelId);
@@ -538,13 +811,11 @@ function renderSublevelNodes(currentSublevel, levelName) {
   });
 }
 
-// FIXED: Parallel loading for speed
 async function renderTeamView() {
   const container = document.getElementById('teamGrid');
   container.innerHTML = '<div style="padding: 20px; color: var(--text-light);">Loading team...</div>';
   document.getElementById('teamTitle').textContent = 'Direct Reports (' + currentUser.directReports.length + ')';
   
-  // Load ALL progress in PARALLEL (much faster!)
   await Promise.all(currentUser.directReports.map(async (email) => {
     if (!allProgress[email]) allProgress[email] = await loadProgressFromSheets(email);
   }));
@@ -669,6 +940,22 @@ function exportAssessment() {
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('passwordInput').addEventListener('keypress', e => { if (e.key === 'Enter') handleLogin(); });
   document.getElementById('emailInput').addEventListener('keypress', e => { if (e.key === 'Enter') document.getElementById('passwordInput').focus(); });
+});
+
+// Close modals on escape key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    hideChangePasswordModal();
+    hideResetPasswordModal();
+  }
+});
+
+// Close modals on overlay click
+document.getElementById('changePasswordModal').addEventListener('click', e => {
+  if (e.target.id === 'changePasswordModal') hideChangePasswordModal();
+});
+document.getElementById('resetPasswordModal').addEventListener('click', e => {
+  if (e.target.id === 'resetPasswordModal') hideResetPasswordModal();
 });
 </script>
 </body>
