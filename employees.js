@@ -106,7 +106,7 @@ const employees = {
     "managerEmail": "bev@simpleonlinehealthcare.com",
     "directReports": [
       "danielle@simpleonlinehealthcare.com",
-      "sean@simpleonlinehealthcare.com"
+      "sean@simpleonlinehealthcare.com",
       "jennifer.sorley@simpleonlinehealthcare.com"
     ]
   },
