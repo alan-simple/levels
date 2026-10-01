@@ -107,6 +107,7 @@ const employees = {
     "directReports": [
       "danielle@simpleonlinehealthcare.com",
       "sean@simpleonlinehealthcare.com"
+      "jennifer.sorley@simpleonlinehealthcare.com"
     ]
   },
   "ali@simpleonlinehealthcare.com": {
