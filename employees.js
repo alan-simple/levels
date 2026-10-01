@@ -107,7 +107,7 @@ const employees = {
     "directReports": [
       "danielle@simpleonlinehealthcare.com",
       "sean@simpleonlinehealthcare.com",
-      "jennifer.sorley@simpleonlinehealthcare.com"
+      "jennifer@simpleonlinehealthcare.com"
     ]
   },
   "ali@simpleonlinehealthcare.com": {
@@ -787,7 +787,7 @@ const employees = {
     "managerEmail": "peter@simpleonlinehealthcare.com",
     "directReports": []
   },
-  "jennifer@simpleonlinehealthcare.com": {
+  "jennifer.Thompson@simpleonlinehealthcare.com": {
     "firstName": "Jennifer",
     "lastName": "Thompson",
     "jobTitle": "Accounts Assistant",
@@ -795,9 +795,7 @@ const employees = {
     "level": 1,
     "sublevel": 1,
     "managerEmail": "ryan@simpleonlinehealthcare.com",
-    "directReports": [
-      "favour@simpleonlinehealthcare.com"
-    ]
+    "directReports": [ ]
   },
   "jodie@simpleonlinehealthcare.com": {
     "firstName": "Jodie",
@@ -1301,7 +1299,7 @@ const employees = {
     "managerEmail": "heather@simpleonlinehealthcare.com",
     "directReports": [
       "adele@simpleonlinehealthcare.com",
-      "jennifer@simpleonlinehealthcare.com",
+      "jennifer.Thompson@simpleonlinehealthcare.com",
       "ondine@simpleonlinehealthcare.com"
     ]
   },
